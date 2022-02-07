@@ -1,0 +1,19 @@
+{
+  "name": "pokemoncries",
+  "version": "1.0.0",
+  "description": "This is a mini-app passion project which will allow aspiring Pokémon Masters to hone their Pokémon cry recognizing skills.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pkelly10439594/pokemon-cries.git"
+  },
+  "author": "Paul Kelly",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pkelly10439594/pokemon-cries/issues"
+  },
+  "homepage": "https://github.com/pkelly10439594/pokemon-cries#readme"
+}
