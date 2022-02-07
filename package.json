@@ -4,7 +4,7 @@
   "description": "This is a mini-app passion project which will allow aspiring Pokémon Masters to hone their Pokémon cry recognizing skills.",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/pkelly10439594/pokemon-cries/issues"
   },
-  "homepage": "https://github.com/pkelly10439594/pokemon-cries#readme"
+  "homepage": "https://github.com/pkelly10439594/pokemon-cries#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "express-handlebars": "^6.0.2"
+  }
 }
