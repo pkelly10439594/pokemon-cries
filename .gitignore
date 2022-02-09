@@ -1,7 +1,10 @@
+# Personal Use
+*.txt
+*.py
+
 # Logs
 logs
 *.log
-*.txt
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
