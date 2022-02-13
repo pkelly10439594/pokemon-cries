@@ -1,8 +1,11 @@
 const path = require('path');
+const listRoutes = require('./list');
 
 const constructorMethod = (app) => {
-    app.use('/', async (req, res) => {
-        res.render('pokemon-cries/list', {title: "Pokémon Repository"});
+    app.use('/list', listRoutes);
+
+    app.use('/', async (req, res) => { //change this
+        res.render('pokemon-cries/landing', {title: "Landing page"});
     });
 };
 
