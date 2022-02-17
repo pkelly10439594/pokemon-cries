@@ -2,3 +2,45 @@
     width: 50px;
     height: 50px;
 }
+
+.cryButton {
+    border-radius: 20px;
+    border: 2px solid #000000;
+    background-color: white;
+    padding: 5px;
+    margin: 15px;
+    filter: drop-shadow(10px 10px 5px #000000);
+}
+
+/* these hex codes can be found at https://bulbapedia.bulbagarden.net/wiki/Template:[GAME]_color */
+.gen1 {
+    background: linear-gradient(120deg, #FF1111 20%, #1111FF 80%);
+}
+
+.gen2 {
+    background: linear-gradient(120deg, #DAA520 20%, #C0C0C0 80%);
+}
+
+.gen3 {
+    background: linear-gradient(120deg, #A00000 20%, #0000A0 80%);
+}
+
+.gen4 {
+    background: linear-gradient(120deg, #AAAAFF 20%, #FFAAAA 80%);
+}
+
+.gen5 {
+    background: linear-gradient(120deg, #444444 20%, #E1E1E1 80%);
+}
+
+.gen6 {
+    background: linear-gradient(120deg, #025DA6 20%, #EA1A3E 80%);
+}
+
+.gen7 {
+    background: linear-gradient(120deg, #F1912B 20%, #5599CA 80%);
+}
+
+.gen8 {
+    background: linear-gradient(120deg, #00A1E9 20%, #BF004F 80%);
+}
