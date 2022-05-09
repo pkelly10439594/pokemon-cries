@@ -7,7 +7,7 @@
 
     function getPkmnCryHTML(pkmnNames, extensions, fileName, cryTag, gen) {
         return $(`
-            <div class="cryButton gen${gen}">
+            <div class="cryButton gen${gen}" id="${cryTag}">
                 ${pkmnNames.reduce((a, b, i) => a + `
                     <img src="/public/images/${fileName}${extensions[i]}.png" class="cryImg">
                     ${b.replace(DELIMITER, "-")}
@@ -52,13 +52,23 @@
                                 ? cry.slice(cry.indexOf(DELIMITER)).toLowerCase()
                                 : "";
                             pkmnList.append(getPkmnCryHTML([cry], [ending], indAsStr, indAsStr + ending, generation));
-                        } else // this cry has multiple forms
-                            pkmnList.append(getPkmnCryHTML(cry,
-                                                cry.map((form) => {
-                                                    return form.includes(DELIMITER)
-                                                        ? form.slice(form.indexOf(DELIMITER)).toLowerCase()
-                                                        : "";}),
-                                                indAsStr, indAsStr, generation));
+                        } else { // this cry has multiple forms
+                            if (typeof(species[0]) === 'string') // this pokemon has a definite main form
+                                pkmnList.append(getPkmnCryHTML(cry,
+                                                    cry.map((form) => {
+                                                        return form.includes(DELIMITER)
+                                                            ? form.slice(form.indexOf(DELIMITER)).toLowerCase()
+                                                            : "";}),
+                                                    indAsStr, indAsStr + cry[0].slice(cry[0].indexOf(DELIMITER)).toLowerCase(),
+                                                    generation));
+                            else // this pokemon has multiple initial forms
+                                pkmnList.append(getPkmnCryHTML(cry,
+                                                    cry.map((form) => {
+                                                        return form.includes(DELIMITER)
+                                                            ? form.slice(form.indexOf(DELIMITER)).toLowerCase()
+                                                            : "";}),
+                                                    indAsStr, indAsStr, generation));
+                        }
                     });
             });
         });
