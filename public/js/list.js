@@ -9,11 +9,11 @@
         return $(`
             <div class="cryButton gen${gen}" id="${cryTag}">
                 ${pkmnNames.reduce((a, b, i) => a + `
-                    <img src="/public/images/${fileName}${extensions[i]}.png" class="cryImg">
+                    <img src="/public/images/${fileName}${extensions[i].replace("%", "%25")}.png" class="cryImg">
                     ${b.replace(DELIMITER, "-")}
                 `, "")}
-                <audio controls>
-                    <source src="/public/cries/${cryTag}.mp3" type="audio/mpeg">
+                <audio>
+                    <source src="/public/cries/${cryTag.replace("%", "%25")}.mp3" type="audio/mpeg">
                 </audio>
             </div>
         `);
@@ -71,6 +71,8 @@
                         }
                     });
             });
+            for (let box of pkmnList.children())
+                box.addEventListener("click", function() {$(this).children("audio")[0].play()});
         });
     });
 })(window.jQuery);

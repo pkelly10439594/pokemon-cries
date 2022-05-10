@@ -12,6 +12,11 @@
     filter: drop-shadow(10px 10px 5px #000000);
 }
 
+.cryButton:hover {
+    filter: brightness(75%) drop-shadow(10px 10px 5px #000000);
+    cursor: pointer;
+}
+
 /* these hex codes can be found at https://bulbapedia.bulbagarden.net/wiki/Template:[GAME]_color */
 .gen1 {
     background: linear-gradient(120deg, #FF1111 20%, #1111FF 80%);
