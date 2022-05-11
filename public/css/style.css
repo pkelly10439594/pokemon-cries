@@ -1,7 +1,17 @@
-.cryImg {
-    width: 50px;
-    height: 50px;
+/* li {
+    display: inline;
+    padding: 10px;
+    cursor: pointer;
 }
+
+ul {
+    list-style-type: none;
+    text-align: center;
+    border-radius: 10px;
+    background-color: blue;
+    width: fit-content;
+    padding: 5px 10px;
+} */
 
 .cryButton {
     border-radius: 20px;
@@ -15,6 +25,11 @@
 .cryButton:hover {
     filter: brightness(75%) drop-shadow(10px 10px 5px #000000);
     cursor: pointer;
+}
+
+.cryImg {
+    width: 50px;
+    height: 50px;
 }
 
 /* these hex codes can be found at https://bulbapedia.bulbagarden.net/wiki/Template:[GAME]_color */
