@@ -12,12 +12,11 @@
                     <img src="/public/images/${fileName}${extensions[i].replace("%", "%25")}.png" class="cryImg">
                     ${b.indexOf(DELIMITER) === -1 ? b : b.replace(DELIMITER, " (").concat(")")}
                 `, "")}
-                <audio>
-                    <source src="/public/cries/${cryTag.replace("%", "%25")}.mp3" type="audio/mpeg">
-                </audio>
             </div>
         `);
     }
+
+    pkmnList.hide();
 
     for (let [generation, pkmnSubList] of POKEMON.entries()) {
         for (let species of pkmnSubList) {
@@ -55,16 +54,30 @@
     }
 
     pkmnList.children().each(function (index, element) {
+        $(element).hide();
         $(element).on("click", function(event) {
             event.preventDefault();
-            $(this).children("audio")[0].play();
+            new Audio(`public/cries/${$(this).attr("id")}.mp3`).play();
         });
     });
+    pkmnList.show();
 
     genList.children().each(function (index, element) {
         $(element).on("click", function (event) {
             event.preventDefault();
             $(`.gen${index + 1}`).each(function (i, e) {$(e).toggle();});
         });
+    });
+
+    $("#showAll").on("click", function (event) {
+        event.preventDefault();
+        for (let g = 1; g <= POKEMON.length; g++)
+            $(`.gen${g}`).each(function (i, e) {$(e).show()});
+    });
+
+    $("#showNone").on("click", function (event) {
+        event.preventDefault();
+        for (let g = 1; g <= POKEMON.length; g++)
+            $(`.gen${g}`).each(function (i, e) {$(e).hide()});
     });
 })(window.jQuery);

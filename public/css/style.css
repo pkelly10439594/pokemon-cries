@@ -1,5 +1,5 @@
 /* li {
-    display: inline;
+    display: inline-block;
     padding: 10px;
     cursor: pointer;
 }
@@ -10,6 +10,8 @@ ul {
     border-radius: 10px;
     background-color: blue;
     width: fit-content;
+    display: flex;
+    justify-content: space-around;
     padding: 5px 10px;
 } */
 
@@ -68,3 +70,7 @@ ul {
 .gen9 {
     background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
 }
+
+/* #genList1 {
+    background-color: red;
+} */

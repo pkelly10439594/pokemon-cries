@@ -286,7 +286,7 @@ const POKEMON = [[
     "Petilil", [["Lilligant", "Lilligant_Hisui"]],
     [["Basculin_Red", "Basculin_Blue", "Basculin_White"]],
     "Sandile", "Krokorok", "Krookodile",
-    [["Darumaka", "Darumaka_Galar"]], [["Darmanitan", "Darmanitan_Zen", "Darmanitan_Galar", "Darmanitan_Galar Zen"]],
+    [["Darumaka", "Darumaka_Galar"]], [["Darmanitan_Standard", "Darmanitan_Zen", "Darmanitan_Galar Standard", "Darmanitan_Galar Zen"]],
     "Maractus",
     "Dwebble", "Crustle",
     "Scraggy", "Scrafty",
@@ -333,7 +333,7 @@ const POKEMON = [[
     "Reshiram", "Zekrom",
     ["Landorus_Incarnate", "Landorus_Therian"],
     ["Kyurem", "Kyurem_White", "Kyurem_Black"],
-    [["Keldeo", "Keldeo_Resolute"]],
+    [["Keldeo_Ordinary", "Keldeo_Resolute"]],
     [["Meloetta_Aria", "Meloetta_Pirouette"]],
     "Genesect"
 ], [
@@ -446,7 +446,7 @@ const POKEMON = [[
     "Falinks",
     "Pincurchin",
     "Snom", "Frosmoth",
-    "Stonjourner", ["Eiscue", "Eiscue_Noice"],
+    "Stonjourner", ["Eiscue_Ice", "Eiscue_Noice"],
     ["Indeedee_Male", "Indeedee_Female"],
     ["Morpeko_Full Belly", "Morpeko_Hangry"],
     "Cufant", "Copperajah",
