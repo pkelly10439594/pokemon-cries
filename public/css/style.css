@@ -71,6 +71,15 @@ ul {
     background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
 }
 
+.revealImg {
+    width: 256px;
+    height: 256px;
+}
+
+#answerImg {
+    height: 260px;
+}
+
 /* #genList1 {
     background-color: red;
 } */

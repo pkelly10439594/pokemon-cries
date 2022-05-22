@@ -5,6 +5,9 @@
     var answerImg = $("#answerImg");
     var pkmn = POKEMON.flat(2);
     var indices = [...pkmn.keys()];
+    var index = 0;
+    var correct = false;
+    var answer, id, pics;
 
     function findId(mon) {
         // if the pokemon has multiple forms with the same cry
@@ -21,7 +24,6 @@
                                             ? j[0].substring(0, j[0].indexOf(DELIMITER))
                                             : j[0],
                                         `${("000" + (i + 1)).slice(-4)}`];
-            return -1;
         }
         // if the pokemon cry is a unique form of a pokemon
         for (let [i, cry] of POKEMON.flat(1).entries()) {
@@ -37,7 +39,6 @@
                                                                     ? mon.substring(mon.indexOf(DELIMITER)).toLowerCase()
                                                                     : ""}`];
         }
-        return -1;
     }
 
     // shuffle the indices (Fisher-Yates algorithm)
@@ -46,23 +47,41 @@
         [indices[i], indices[j]] = [indices[j], indices[i]];
     }
 
-    let mon = pkmn[indices[0]];
-    let [answer, id] = findId(mon);
-    quizAudio.attr("src", `/public/cries/${id.replace("%", "%25")}.mp3`);
-    quizAudio.trigger("play");
-    quizInput.select();
+    function getOneCry(i) {
+        answerImg.empty();
+        quizInput.val('');
+        correct = false;
+        let mon = pkmn[indices[i]];
+        [answer, id] = findId(mon);
+        pics = typeof mon === "string" ? [id] : mon.map(x => x.indexOf(DELIMITER) === -1
+                                                                ? id
+                                                                : id.split(DELIMITER)[0]
+                                                                    + x.substring(x.indexOf(DELIMITER)).toLowerCase());
+        quizAudio.attr("src", `/public/cries/${id.replace("%", "%25")}.mp3`);
+        quizAudio.trigger("play");
+        quizInput.select();
+    }
+
+    getOneCry(index);
 
     quizInput.focus(function() {
         // this will be for the dropdown
     });
 
-    quizInput.keyup(function (event) {
+    quizInput.keydown(function (event) {
+        if (correct) {
+            event.preventDefault();
+            return;
+        }
+        if (event.which !== 13) return; // enter key
         event.preventDefault();
-        if (event.which === 13) { // enter key
-            let response = quizInput.val();
 
-            if (response === answer)
-                answerImg.html(answer);
+        if (quizInput.val() === answer) {
+            correct = true;
+            pics.forEach(x => answerImg.append($(`<img src="/public/images/${x.replace("%", "%25")}.png" class="revealImg">`)));
+            answerImg.append("<br>");
+            quizAudio.trigger("play");
+            setTimeout(getOneCry, 3000, ++index);
         }
     });
 })(window.jQuery);
