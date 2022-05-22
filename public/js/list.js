@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
     var genIndex = -1;
     var genIndicator = $("#genIndicator");
     var genList = $("#genList");
@@ -55,27 +55,27 @@
 
     pkmnList.children().each(function (index, element) {
         $(element).hide();
-        $(element).on("click", function(event) {
+        $(element).click(function(event) {
             event.preventDefault();
-            new Audio(`public/cries/${$(this).attr("id")}.mp3`).play();
+            new Audio(`public/cries/${$(this).attr("id").replace("%", "%25")}.mp3`).play();
         });
     });
     pkmnList.show();
 
     genList.children().each(function (index, element) {
-        $(element).on("click", function (event) {
+        $(element).click(function (event) {
             event.preventDefault();
             $(`.gen${index + 1}`).each(function (i, e) {$(e).toggle();});
         });
     });
 
-    $("#showAll").on("click", function (event) {
+    $("#showAll").click(function (event) {
         event.preventDefault();
         for (let g = 1; g <= POKEMON.length; g++)
             $(`.gen${g}`).each(function (i, e) {$(e).show()});
     });
 
-    $("#showNone").on("click", function (event) {
+    $("#showNone").click(function (event) {
         event.preventDefault();
         for (let g = 1; g <= POKEMON.length; g++)
             $(`.gen${g}`).each(function (i, e) {$(e).hide()});
