@@ -93,7 +93,7 @@
             event.preventDefault();
             let visibles = searchResults.find(':visible').get();
             let i = visibles.findIndex(x => $(x).text() === $("#selectedItem").text());
-            $(visibles[i]).removeAttr('id');
+            $("#selectedItem").removeAttr('id');
             $(visibles[i - 1]).attr('id', "selectedItem");
             quizInput.val($("#selectedItem").text());
             return;
@@ -102,12 +102,12 @@
             event.preventDefault();
             let visibles = searchResults.find(':visible').get();
             let i = visibles.findIndex(x => $(x).text() === $("#selectedItem").text());
-            $(visibles[i]).removeAttr('id');
+            $("#selectedItem").removeAttr('id');
             $(visibles[i + 1]).attr('id', "selectedItem");
             quizInput.val($("#selectedItem").text());
             return;
         }
-        
+
         // 13 => enter key
         if (event.which !== 13 || quizInput.val() !== answer || quizInput.is('[readonly]')) return;
         event.preventDefault();
