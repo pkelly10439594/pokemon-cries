@@ -71,15 +71,148 @@ ul {
     background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
 }
 
-.revealImg {
+.listItem {
+    list-style-type: none;
+}
+
+.revealImg1 {
     width: 256px;
     height: 256px;
 }
 
+.revealImg2, .revealImg3, .revealImg4 {
+    width: 128px;
+    height: 128px;
+}
+
+.revealImg5, .revealImg6 {
+    width: 64px;
+    height: 64px;
+}
+
 #answerImg {
+    position: relative;
     height: 260px;
 }
 
-/* #genList1 {
-    background-color: red;
-} */
+#dropdown {
+    overflow-y: scroll;
+    height: 256px;
+    width: 300px;
+    position: absolute;
+    bottom: 175px;
+    background-color: white;
+}
+
+#selectedItem {
+    background-color: #3875D7;
+    color: white;
+    cursor: pointer;
+}
+
+
+
+#img0.revealImg2 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#img1.revealImg2 {
+    position: absolute;
+    top: 128px;
+    left: 128px;
+}
+
+#img0.revealImg3 {
+    position: absolute;
+    top: 0px;
+    left: 64px;
+}
+#img1.revealImg3 {
+    position: absolute;
+    top: 128px;
+    left: 0px;
+}
+#img2.revealImg3 {
+    position: absolute;
+    top: 128px;
+    left: 128px;
+}
+
+#img0.revealImg4 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#img1.revealImg4 {
+    position: absolute;
+    top: 0px;
+    left: 128px;
+}
+#img2.revealImg4 {
+    position: absolute;
+    top: 128px;
+    left: 0px;
+}
+#img3.revealImg4 {
+    position: absolute;
+    top: 128px;
+    left: 128px;
+}
+
+#img0.revealImg5 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#img1.revealImg5 {
+    position: absolute;
+    top: 0px;
+    left: 192px;
+}
+#img2.revealImg5 {
+    position: absolute;
+    top: 96px;
+    left: 96px;
+}
+#img3.revealImg5 {
+    position: absolute;
+    top: 192px;
+    left: 0px;
+}
+#img4.revealImg5 {
+    position: absolute;
+    top: 192px;
+    left: 192px;
+}
+
+#img0.revealImg6 {
+    position: absolute;
+    top: 0px;
+    left: 32px;
+}
+#img1.revealImg6 {
+    position: absolute;
+    top: 0px;
+    left: 160px;
+}
+#img2.revealImg6 {
+    position: absolute;
+    top: 96px;
+    left: 32px;
+}
+#img3.revealImg6 {
+    position: absolute;
+    top: 96px;
+    left: 160px;
+}
+#img4.revealImg6 {
+    position: absolute;
+    top: 192px;
+    left: 32px;
+}
+#img5.revealImg6 {
+    position: absolute;
+    top: 192px;
+    left: 160px;
+}
