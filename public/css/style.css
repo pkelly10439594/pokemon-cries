@@ -1,20 +1,3 @@
-/* li {
-    display: inline-block;
-    padding: 10px;
-    cursor: pointer;
-}
-
-ul {
-    list-style-type: none;
-    text-align: center;
-    border-radius: 10px;
-    background-color: blue;
-    width: fit-content;
-    display: flex;
-    justify-content: space-around;
-    padding: 5px 10px;
-} */
-
 .cryButton {
     border-radius: 20px;
     border: 2px solid #000000;
@@ -22,6 +5,17 @@ ul {
     padding: 5px;
     margin: 15px;
     filter: drop-shadow(10px 10px 5px #000000);
+
+    /* make the text unhighlightable. */
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+.cryButton:hover:active {
+    filter: brightness(50%) drop-shadow(10px 10px 5px #000000);
 }
 
 .cryButton:hover {
@@ -71,6 +65,24 @@ ul {
     background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
 }
 
+.genList {
+    padding: 10px;
+    cursor: pointer;
+    border: 2px solid #000000;
+    width: 100px;
+    height: 10px;
+    text-align: center;
+    line-height: 10px;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.genList:hover {
+    filter: brightness(75%);
+    color: black;
+}
+
 .listItem {
     list-style-type: none;
 }
@@ -90,6 +102,11 @@ ul {
     height: 64px;
 }
 
+.unselectedGen {
+    filter: grayscale(2);
+    color: white;
+}
+
 #answerImg {
     position: relative;
     height: 260px;
@@ -100,7 +117,7 @@ ul {
     height: 256px;
     width: 300px;
     position: absolute;
-    bottom: 175px;
+    bottom: 174px;
     background-color: white;
 }
 
@@ -108,6 +125,76 @@ ul {
     background-color: #3875D7;
     color: white;
     cursor: pointer;
+}
+
+#genList, #genListExtras {
+    list-style-type: none;
+    /* text-align: center; */
+    /* width: fit-content; */
+    /* font-weight: bold; */
+    display: flex;
+    justify-content: center;
+    padding: 5px 10px;
+}
+
+#genList1 {
+    background: url("/public/images/0006.png") no-repeat left / 50px,
+                url("/public/images/0009.png") no-repeat right / 50px,
+                linear-gradient(120deg, #FF1111 20%, #1111FF 80%);
+}
+
+#genList2 {
+    background: url("/public/images/0250.png") no-repeat left / 50px,
+                url("/public/images/0249.png") no-repeat right / 50px,
+                linear-gradient(120deg, #DAA520 20%, #C0C0C0 80%);
+}
+
+#genList3 {
+    background: url("/public/images/0383.png") no-repeat left / 50px,
+                url("/public/images/0382.png") no-repeat right / 50px,
+                linear-gradient(120deg, #A00000 20%, #0000A0 80%);
+}
+
+#genList4 {
+    background: url("/public/images/0483.png") no-repeat left / 50px,
+                url("/public/images/0484.png") no-repeat right / 50px,
+                linear-gradient(120deg, #AAAAFF 20%, #FFAAAA 80%);
+}
+
+#genList5 {
+    background: url("/public/images/0643.png") no-repeat left / 50px,
+                url("/public/images/0644.png") no-repeat right / 50px,
+                linear-gradient(120deg, #444444 20%, #E1E1E1 80%);
+}
+
+#genList6 {
+    background: url("/public/images/0716.png") no-repeat left / 50px,
+                url("/public/images/0717.png") no-repeat right / 50px,
+                linear-gradient(120deg, #025DA6 20%, #EA1A3E 80%);
+}
+
+#genList7 {
+    background: url("/public/images/0791.png") no-repeat left / 50px,
+                url("/public/images/0792.png") no-repeat right / 50px,
+                linear-gradient(120deg, #F1912B 20%, #5599CA 80%);
+}
+
+#genList8 {
+    background: url("/public/images/0888_crowned sword.png") no-repeat left / 50px,
+                url("/public/images/0889_crowned shield.png") no-repeat right / 50px,
+                linear-gradient(120deg, #00A1E9 20%, #BF004F 80%);
+}
+
+#genList9 {
+    background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
+}
+
+#showAll, #genList1 {
+    border-radius: 20px 0px 0px 20px;
+}
+
+#showNone, #genList8 {
+    border-radius: 0px 20px 20px 0px;
 }
 
 

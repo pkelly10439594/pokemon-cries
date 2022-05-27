@@ -66,6 +66,7 @@
         $(element).click(function (event) {
             event.preventDefault();
             $(`.gen${index + 1}`).each(function (i, e) {$(e).toggle();});
+            $(element).toggleClass("unselectedGen");
         });
     });
 
@@ -73,11 +74,13 @@
         event.preventDefault();
         for (let g = 1; g <= POKEMON.length; g++)
             $(`.gen${g}`).each(function (i, e) {$(e).show()});
+        genList.children().removeClass("unselectedGen");
     });
 
     $("#showNone").click(function (event) {
         event.preventDefault();
         for (let g = 1; g <= POKEMON.length; g++)
             $(`.gen${g}`).each(function (i, e) {$(e).hide()});
+        genList.children().addClass("unselectedGen");
     });
 })(window.jQuery);

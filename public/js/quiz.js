@@ -22,12 +22,12 @@
             for (let [i, cry] of POKEMON.flat(1).entries())
                 if (Array.isArray(cry))
                     for (let j of cry)
-                        if (j[0].indexOf(mon[0]) > -1)
+                        if (j[0].indexOf(mon[0]) > -1) //includes?
                             if (POKEMON.flat(1)[i][0] === mon[0].substring(0, mon[0].indexOf(DELIMITER)))
                                 return [`${j[0].substring(0, j[0].indexOf(DELIMITER))} (${j[0].substring(j[0].indexOf(DELIMITER) + 1)})`,
                                         `${("000" + (i + 1)).slice(-4)}${j[0].substring(j[0].indexOf(DELIMITER)).toLowerCase()}`];
                             else
-                                return [j[0].indexOf(DELIMITER) > -1
+                                return [j[0].includes(DELIMITER)
                                             ? j[0].substring(0, j[0].indexOf(DELIMITER))
                                             : j[0],
                                         `${("000" + (i + 1)).slice(-4)}`];
@@ -39,10 +39,10 @@
             else
                 for (let j of cry)
                     if (j === mon)
-                        return [mon.indexOf(DELIMITER) === -1
+                        return [!mon.includes(DELIMITER)
                                     ? mon
                                     : `${mon.substring(0, mon.indexOf(DELIMITER))} (${mon.substring(mon.indexOf(DELIMITER) + 1)})`,
-                                `${("000" + (i + 1)).slice(-4)}${mon.indexOf(DELIMITER) > -1
+                                `${("000" + (i + 1)).slice(-4)}${mon.includes(DELIMITER)
                                                                     ? mon.substring(mon.indexOf(DELIMITER)).toLowerCase()
                                                                     : ""}`];
         }
@@ -55,12 +55,13 @@
     }
 
     function getOneCry(i) {
+        if (i >= indices.length) return;
         quizInput.attr("readonly", false);
         answerImg.empty();
         quizInput.val('');
         let mon = pkmn[indices[i]];
         [answer, id] = findId(mon);
-        pics = typeof mon === "string" ? [id] : mon.map(x => x.indexOf(DELIMITER) === -1
+        pics = typeof mon === "string" ? [id] : mon.map(x => !x.includes(DELIMITER)
                                                                 ? id
                                                                 : id.split(DELIMITER)[0]
                                                                     + x.substring(x.indexOf(DELIMITER)).toLowerCase());

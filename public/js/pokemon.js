@@ -455,10 +455,10 @@ const POKEMON = [[
     "Dreepy", "Drakloak", "Dragapult",
     ["Zacian_Hero of Many Battles", "Zacian_Crowned Sword"], ["Zamazenta_Hero of Many Battles", "Zamazenta_Crowned Shield"],
     ["Eternatus", "Eternatus_Eternamax"],
-    "Kubfu", ["Urshifu_Single Strike", "Urshifu_Rapid Strike"],
+    "Kubfu", ["Urshifu_Single", "Urshifu_Rapid"],
     "Zarude",
     "Regieleki", "Regidrago",
-    "Glastrier", "Spectrier", ["Calyrex", "Calyrex_Ice Rider", "Calyrex_Shadow Rider"],
+    "Glastrier", "Spectrier", ["Calyrex", "Calyrex_Ice", "Calyrex_Shadow"],
     "Wyrdeer", "Kleavor", "Ursaluna", [["Basculegion_Male", "Basculegion_Female"]], "Sneasler", "Overqwil",
     ["Enamorus_Incarnate", "Enamorus_Therian"]
 ]];
