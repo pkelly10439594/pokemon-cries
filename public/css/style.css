@@ -73,9 +73,6 @@
     height: 10px;
     text-align: center;
     line-height: 10px;
-    /* display: flex;
-    align-items: center;
-    justify-content: center; */
 }
 
 .genList:hover {
@@ -107,6 +104,16 @@
     color: white;
 }
 
+#answerContainer {
+    position: relative;
+}
+
+#answerImg, #dropdown {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 #answerImg {
     position: relative;
     height: 260px;
@@ -114,10 +121,8 @@
 
 #dropdown {
     overflow-y: scroll;
-    height: 256px;
+    height: 300px;
     width: 300px;
-    position: absolute;
-    bottom: 174px;
     background-color: white;
 }
 
@@ -129,9 +134,6 @@
 
 #genList, #genListExtras {
     list-style-type: none;
-    /* text-align: center; */
-    /* width: fit-content; */
-    /* font-weight: bold; */
     display: flex;
     justify-content: center;
     padding: 5px 10px;
@@ -187,6 +189,15 @@
 
 #genList9 {
     background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
+}
+
+#genSelector {
+    /* make the text unhighlightable. */
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
 }
 
 #showAll, #genList1 {

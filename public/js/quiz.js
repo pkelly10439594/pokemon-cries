@@ -4,9 +4,12 @@
     var quizAudio = $("#quizAudio");
     var answerImg = $("#answerImg");
     var searchResults = $("#searchResults");
+    var genList = $("#genList");
+    var timeout; // timeout for correct guess
     var pkmn = POKEMON.flat(2);
+    var sizes = POKEMON.map(gen => gen.flat(1).length);
     var indices = [...pkmn.keys()];
-    var index = 0;
+    var cryIndex = 0;
     var answer, id, pics;
     var answers = POKEMON.flat(2).map((x, i) => typeof x === "string"
                                             ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
@@ -49,13 +52,16 @@
     }
 
     // shuffle the indices (Fisher-Yates algorithm)
-    for (let i = indices.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [indices[i], indices[j]] = [indices[j], indices[i]];
+    function shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
     }
 
     function getOneCry(i) {
-        if (i >= indices.length) return;
+        if (i >= indices.length) return; // maybe put a victory screen here idk
         quizInput.attr("readonly", false);
         answerImg.empty();
         quizInput.val('');
@@ -70,8 +76,10 @@
         quizInput.select();
     }
 
-    getOneCry(index);
+    shuffle(indices);
+    getOneCry(cryIndex);
     for (let x of answers) searchResults.append(`<li class="listItem">${x}</li>`);
+    $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
 
     quizInput.focus(function() {
         if (quizInput.is('[readonly]')) return;
@@ -90,21 +98,13 @@
     });
 
     quizInput.keydown(function (event) {
-        if (event.which === 38) { // up arrow
+        if (event.which === 38 || event.which === 40) { // up arrow or down arrow
             event.preventDefault();
             let visibles = searchResults.find(':visible').get();
             let i = visibles.findIndex(x => $(x).text() === $("#selectedItem").text());
             $("#selectedItem").removeAttr('id');
-            $(visibles[i - 1]).attr('id', "selectedItem");
-            quizInput.val($("#selectedItem").text());
-            return;
-        }
-        if (event.which === 40) { // down arrow
-            event.preventDefault();
-            let visibles = searchResults.find(':visible').get();
-            let i = visibles.findIndex(x => $(x).text() === $("#selectedItem").text());
-            $("#selectedItem").removeAttr('id');
-            $(visibles[i + 1]).attr('id', "selectedItem");
+            // up arrow => i - 1; down arrow => i + 1
+            $(visibles[i + event.which - 39]).attr('id', "selectedItem");
             quizInput.val($("#selectedItem").text());
             return;
         }
@@ -121,7 +121,8 @@
             $(`<img src="/public/images/${x.replace("%", "%25")}.png" class="revealImg${pics.length}" id="img${i}">`)));
         answerImg.append("<br>");
         quizAudio.trigger("play");
-        setTimeout(getOneCry, 4000, ++index);
+        $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
+        timeout = setTimeout(getOneCry, 4000, cryIndex);
     });
 
     $(".listItem").each(function () {
@@ -133,6 +134,41 @@
                 quizInput.focus();
             });
         });
+    });
+
+    genList.children().each(function (index, element) {
+        $(element).click(function (event) {
+            event.preventDefault();
+            $(element).toggleClass("unselectedGen");
+            let start = sizes.slice(0, index).reduce((a, b) => a + b, 0);
+            indices = shuffle($(element).attr("class").includes("unselectedGen")
+                                ? indices.filter((x, i) => x < start || x >= start + sizes[index])
+                                : indices.concat([...Array(sizes[index]).keys()].map(x => x + start)));
+            cryIndex = 0;
+            $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+            clearTimeout(timeout);
+            getOneCry(cryIndex);
+        });
+    });
+
+    $("#showAll").click(function (event) {
+        event.preventDefault();
+        genList.children().removeClass("unselectedGen");
+        indices = shuffle([...pkmn.keys()]);
+        cryIndex = 0;
+        $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+        clearTimeout(timeout);
+        getOneCry(cryIndex);
+    });
+
+    $("#showNone").click(function (event) {
+        event.preventDefault();
+        genList.children().addClass("unselectedGen");
+        indices = [];
+        cryIndex = 0;
+        $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+        clearTimeout(timeout);
+        getOneCry(cryIndex);
     });
 
     $(document).keydown(function (event) {
