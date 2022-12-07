@@ -6,8 +6,8 @@
     var searchResults = $("#searchResults");
     var genList = $("#genList");
     var timeout; // timeout for correct guess
-    var pkmn = POKEMON.flat(2);
-    var sizes = POKEMON.map(gen => gen.flat(1).length);
+    var pkmn = POKEMON.flat(2).filter(x => {return x !== "";}); // filter out pokédex gaps
+    var sizes = POKEMON.map(gen => gen.flat(1).filter(x => {return x !== "";}).length);
     var indices = [...pkmn.keys()];
     var cryIndex = 0;
     var answer, id, pics;

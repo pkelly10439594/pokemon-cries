@@ -21,6 +21,7 @@
     for (let [generation, pkmnSubList] of POKEMON.entries()) {
         for (let species of pkmnSubList) {
             ++pkmnIndex;
+            if (species === "") continue; // in case there is a gap in the pokédex
             let indAsStr = ("000" + pkmnIndex).slice(-4);
 
             if (typeof(species) === 'string') // element only has one cry
@@ -57,7 +58,7 @@
         $(element).hide();
         $(element).click(function(event) {
             event.preventDefault();
-            new Audio(`public/cries/${$(this).attr("id").replace("%", "%25")}.mp3`).play();
+            new Audio(`/public/cries/${$(this).attr("id").replace("%", "%25")}.mp3`).play();
         });
     });
     pkmnList.show();

@@ -68,8 +68,7 @@
 .genList {
     padding: 10px;
     cursor: pointer;
-    border: 2px solid #000000;
-    width: 100px;
+    min-width: 150px;
     height: 10px;
     text-align: center;
     line-height: 10px;
@@ -132,11 +131,25 @@
     cursor: pointer;
 }
 
+#genList {
+    padding: 0;
+    background: #000000;
+    border: 2px solid #000000;
+    gap: 2px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
 #genList, #genListExtras {
     list-style-type: none;
     display: flex;
     justify-content: center;
-    padding: 5px 10px;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+#genList > .genList {
+    flex: 1 0 auto;
 }
 
 #genList1 {
@@ -188,7 +201,13 @@
 }
 
 #genList9 {
-    background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
+    background: url("/public/images/0998.png") no-repeat left / 50px,
+                url("/public/images/0999.png") no-repeat right / 50px,
+                linear-gradient(120deg, #F34134 20%, #8334B7 80%);
+}
+
+#genListExtras > .genList {
+    border: 2px solid #000000;
 }
 
 #genSelector {
@@ -200,11 +219,11 @@
     -o-user-select: none;
 }
 
-#showAll, #genList1 {
+#showAll {
     border-radius: 20px 0px 0px 20px;
 }
 
-#showNone, #genList8 {
+#showNone {
     border-radius: 0px 20px 20px 0px;
 }
 
