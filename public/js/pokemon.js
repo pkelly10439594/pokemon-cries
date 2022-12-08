@@ -1,7 +1,7 @@
 // anything created in here will be accessible to any other
 // script for this webapp without need for imports.
 const DELIMITER = '_';
-// layering: generation -> species -> cry -> forms sharing cry
+// layering: generation -> species -> cry -> forms sharing cry -> different species with cry
 const POKEMON = [[
     "Bulbasaur", "Ivysaur", ["Venusaur", "Venusaur_Mega"],
     "Charmander", "Charmeleon", ["Charizard", "Charizard_Mega X", "Charizard_Mega Y"],
@@ -476,13 +476,13 @@ const POKEMON = [[
     "Wiglett", "Wugtrio",
     "Dondozo",
     "Veluza",
-    "Finizen", ["Palafin_Zero", "Palafin_Hero"],
+    [["Finizen", ["934_Palafin_Zero"]]], ["Palafin_Hero"],
     "Smoliv", "Dolliv", "Arboliva",
     "Capsakid", "Scovillain",
     "Tadbulb", "Bellibolt",
     "Varoom", "Revavroom",
     "Orthworm",
-    "Tandemaus", ["Maushold_Family of Four", "Maushold_Family of Three"],
+    "Tandemaus", ["Maushold_Family of Three", "Maushold_Family of Four"],
     "Cetoddle", "Cetitan",
     "Frigibax", "Arctibax", "Baxcalibur",
     ["Tatsugiri_Curly", "Tatsugiri_Droopy", "Tatsugiri_Stretchy"],

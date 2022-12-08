@@ -5,11 +5,11 @@
     var pkmnIndex = 0;
     var pkmnList = $("#pkmnList");
 
-    function getPkmnCryHTML(pkmnNames, extensions, fileName, cryTag, gen) {
+    function getPkmnCryHTML(pkmnNames, extensions, fileNames, cryTag, gen) {
         return $(`
             <div class="cryButton gen${gen + 1}" id="${cryTag}">
                 ${pkmnNames.reduce((a, b, i) => a + `
-                    <img src="/public/images/${fileName}${extensions[i].replace("%", "%25")}.png" class="cryImg">
+                    <img src="/public/images/${fileNames[i]}${extensions[i].replace("%", "%25")}.png" class="cryImg">
                     ${b.indexOf(DELIMITER) === -1 ? b : b.replace(DELIMITER, " (").concat(")")}
                 `, "")}
             </div>
@@ -25,14 +25,14 @@
             let indAsStr = ("000" + pkmnIndex).slice(-4);
 
             if (typeof(species) === 'string') // element only has one cry
-                pkmnList.append(getPkmnCryHTML([species], [""], indAsStr, indAsStr, generation));
+                pkmnList.append(getPkmnCryHTML([species], [""], [indAsStr], indAsStr, generation));
             else // element is a species with multiple cries
                 species.forEach((cry) => {
                     if (typeof(cry) === 'string') { // this cry only has one form
                         let ending = cry.includes(DELIMITER)
                             ? cry.slice(cry.indexOf(DELIMITER)).toLowerCase()
                             : "";
-                        pkmnList.append(getPkmnCryHTML([cry], [ending], indAsStr, indAsStr + ending, generation));
+                        pkmnList.append(getPkmnCryHTML([cry], [ending], [indAsStr], indAsStr + ending, generation));
                     } else { // this cry has multiple forms
                         if (typeof(species[0]) === 'string') // this pokemon has a definite main form
                             pkmnList.append(getPkmnCryHTML(cry,
@@ -40,15 +40,34 @@
                                                     return form.includes(DELIMITER)
                                                         ? form.slice(form.indexOf(DELIMITER)).toLowerCase()
                                                         : "";}),
-                                                indAsStr, indAsStr + cry[0].slice(cry[0].indexOf(DELIMITER)).toLowerCase(),
+                                                Array(cry.length).fill(indAsStr),
+                                                indAsStr + cry[0].slice(cry[0].indexOf(DELIMITER)).toLowerCase(),
                                                 generation));
                         else // this pokemon has multiple initial forms
-                            pkmnList.append(getPkmnCryHTML(cry,
+                            pkmnList.append(getPkmnCryHTML(
                                                 cry.map((form) => {
-                                                    return form.includes(DELIMITER)
-                                                        ? form.slice(form.indexOf(DELIMITER)).toLowerCase()
-                                                        : "";}),
-                                                indAsStr, indAsStr, generation));
+                                                    // this is designed to handle only Finizen atm, could break later
+                                                    // (["Finizen", ["934_Palafin_Zero", "..."]] or ["Finizen", ["934_Palafin_Zero"], ["..."]])???
+                                                    // currently handles the second but maybe first is more robust
+                                                    // will leave it until i have reason to fix
+                                                    return typeof(form) === "string"
+                                                        ? form
+                                                        : form[0].slice(form[0].indexOf(DELIMITER) + 1);
+                                                }),
+                                                cry.map((form) => {
+                                                    return typeof(form) === "string"
+                                                        ? form.includes(DELIMITER)
+                                                            ? form.slice(form.indexOf(DELIMITER)).toLowerCase()
+                                                            : ""
+                                                        : DELIMITER + form[0].split(DELIMITER).pop().toLowerCase();
+                                                }),
+                                                cry.map((form) => {
+                                                    // this is designed to handle only Finizen atm, could break later
+                                                    return typeof(form) === "string"
+                                                        ? indAsStr
+                                                        : ("000" + form[0].slice(0, form[0].indexOf(DELIMITER))).slice(-4);
+                                                }),
+                                                indAsStr, generation));
                     }
                 });
         }

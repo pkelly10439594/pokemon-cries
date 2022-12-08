@@ -13,8 +13,17 @@
     var answer, id, pics;
     var answers = POKEMON.flat(2).map((x, i) => typeof x === "string"
                                             ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
-                                            : (!x[0].includes(DELIMITER) ? x[0] :
-                                                x[0].includes(POKEMON.flat(2)[i - 1])
+                                            : (!x[0].includes(DELIMITER)
+                                                ? (x.every((v) => typeof v === "string")
+                                                    ? x[0]
+                                                    // this is designed to handle only Finizen atm, could break later
+                                                    // (["Finizen", ["934_Palafin_Zero", "..."]] or ["Finizen", ["934_Palafin_Zero"], ["..."]])???
+                                                    // currently handles the second but maybe first is more robust
+                                                    // will leave it until i have reason to fix
+                                                    : x.map((v) => typeof v === "string"
+                                                            ? v
+                                                            : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "))
+                                                : x[0].includes(POKEMON.flat(2)[i - 1])
                                                 ? `${x[0].replace(DELIMITER, " (")})`
                                                 : x[0].substring(0, x[0].indexOf(DELIMITER))))
                                         .sort();
@@ -25,15 +34,22 @@
             for (let [i, cry] of POKEMON.flat(1).entries())
                 if (Array.isArray(cry))
                     for (let j of cry)
-                        if (j[0].indexOf(mon[0]) > -1) //includes?
+                        if (j[0].indexOf(mon[0]) > -1) { //includes?
+                            // check for exactly cramorant's situation i think
                             if (POKEMON.flat(1)[i][0] === mon[0].substring(0, mon[0].indexOf(DELIMITER)))
                                 return [`${j[0].substring(0, j[0].indexOf(DELIMITER))} (${j[0].substring(j[0].indexOf(DELIMITER) + 1)})`,
                                         `${("000" + (i + 1)).slice(-4)}${j[0].substring(j[0].indexOf(DELIMITER)).toLowerCase()}`];
                             else
-                                return [j[0].includes(DELIMITER)
+                                return [j.every((v) => typeof v === "string")
+                                        ? j[0].includes(DELIMITER)
                                             ? j[0].substring(0, j[0].indexOf(DELIMITER))
-                                            : j[0],
+                                            : j[0]
+                                        // this is designed to handle only Finizen atm, could break later
+                                        : j.map((v) => typeof v === "string"
+                                                ? v
+                                                : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "),
                                         `${("000" + (i + 1)).slice(-4)}`];
+                        }
         }
         // if the pokemon cry is a unique form of a pokemon
         for (let [i, cry] of POKEMON.flat(1).entries()) {
@@ -67,10 +83,16 @@
         quizInput.val('');
         let mon = pkmn[indices[i]];
         [answer, id] = findId(mon);
-        pics = typeof mon === "string" ? [id] : mon.map(x => !x.includes(DELIMITER)
-                                                                ? id
-                                                                : id.split(DELIMITER)[0]
-                                                                    + x.substring(x.indexOf(DELIMITER)).toLowerCase());
+        pics = typeof mon === "string"
+                    ? [id]
+                    : mon.map(x => typeof x === "string"
+                                ? !x.includes(DELIMITER)
+                                    ? id
+                                    : id.split(DELIMITER)[0] + x.substring(x.indexOf(DELIMITER)).toLowerCase()
+                                // this is designed to handle only Finizen atm, could break later
+                                : ("000" + x[0].slice(0, x[0].indexOf(DELIMITER))).slice(-4)
+                                    + DELIMITER
+                                    + x[0].split(DELIMITER).pop().toLowerCase());
         quizAudio.attr("src", `/public/cries/${id.replace("%", "%25")}.mp3`);
         quizAudio.trigger("play");
         quizInput.select();
