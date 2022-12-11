@@ -477,7 +477,7 @@ const POKEMON = [[
     "Charcadet", "Armarouge", "Ceruledge",
     "Tadbulb", "Bellibolt",
     "Wattrel", "Kilowattrel",
-    "Machiff", "Mabosstiff",
+    "Maschiff", "Mabosstiff",
     "Shroodle", "Grafaiai",
     "Bramblin", "Brambleghast",
     "Toedscool", "Toedscruel",
