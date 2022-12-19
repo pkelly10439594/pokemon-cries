@@ -17,7 +17,7 @@
                                                 ? (x.every((v) => typeof v === "string")
                                                     ? x[0]
                                                     // this is designed to handle only Finizen atm, could break later
-                                                    // (["Finizen", ["934_Palafin_Zero", "..."]] or ["Finizen", ["934_Palafin_Zero"], ["..."]])???
+                                                    // (["Finizen", ["964_Palafin_Zero", "..."]] or ["Finizen", ["964_Palafin_Zero"], ["..."]])???
                                                     // currently handles the second but maybe first is more robust
                                                     // will leave it until i have reason to fix
                                                     : x.map((v) => typeof v === "string"

@@ -1,3 +1,15 @@
+body {
+    background-color: #222222;
+}
+
+h1, li, p {
+    color: #dddddd;
+}
+
+h1, p {
+    text-align: center;
+}
+
 .cryButton {
     border-radius: 20px;
     border: 2px solid #000000;
@@ -72,6 +84,7 @@
     height: 10px;
     text-align: center;
     line-height: 10px;
+    color: black;
 }
 
 .genList:hover {
@@ -81,6 +94,7 @@
 
 .listItem {
     list-style-type: none;
+    text-align: left;
 }
 
 .revealImg1 {
@@ -104,13 +118,8 @@
 }
 
 #answerContainer {
+    text-align: center;
     position: relative;
-}
-
-#answerImg, #dropdown {
-    position: absolute;
-    top: 0;
-    left: 0;
 }
 
 #answerImg {
@@ -119,15 +128,17 @@
 }
 
 #dropdown {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -150px;
     overflow-y: scroll;
     height: 300px;
     width: 300px;
-    background-color: white;
 }
 
 #selectedItem {
     background-color: #3875D7;
-    color: white;
     cursor: pointer;
 }
 
@@ -227,109 +238,131 @@
     border-radius: 0px 20px 20px 0px;
 }
 
+#showAll, #showNone {
+    background-color: #dddddd;
+}
 
+#dropdown, .listItem {
+    background-color: #555555;
+}
 
 #img0.revealImg2 {
     position: absolute;
     top: 0px;
-    left: 0px;
+    left: 50%;
+    margin-left: -128px;
 }
 #img1.revealImg2 {
     position: absolute;
     top: 128px;
-    left: 128px;
+    left: 50%;
 }
 
 #img0.revealImg3 {
     position: absolute;
     top: 0px;
-    left: 64px;
+    left: 50%;
+    margin-left: -64px;
 }
 #img1.revealImg3 {
     position: absolute;
     top: 128px;
-    left: 0px;
+    left: 50%;
+    margin-left: -128px;
 }
 #img2.revealImg3 {
     position: absolute;
     top: 128px;
-    left: 128px;
+    left: 50%;
 }
 
 #img0.revealImg4 {
     position: absolute;
     top: 0px;
-    left: 0px;
+    left: 50%;
+    margin-left: -128px;
 }
 #img1.revealImg4 {
     position: absolute;
     top: 0px;
-    left: 128px;
+    left: 50%;
 }
 #img2.revealImg4 {
     position: absolute;
     top: 128px;
-    left: 0px;
+    left: 50%;
+    margin-left: -128px;
 }
 #img3.revealImg4 {
     position: absolute;
     top: 128px;
-    left: 128px;
+    left: 50%;
 }
 
 #img0.revealImg5 {
     position: absolute;
     top: 0px;
-    left: 0px;
+    left: 50%;
+    margin-left: -128px;
 }
 #img1.revealImg5 {
     position: absolute;
     top: 0px;
-    left: 192px;
+    left: 50%;
+    margin-left: 64px;
 }
 #img2.revealImg5 {
     position: absolute;
     top: 96px;
-    left: 96px;
+    left: 50%;
+    margin-left: -32px;
 }
 #img3.revealImg5 {
     position: absolute;
     top: 192px;
-    left: 0px;
+    left: 50%;
+    margin-left: -128px;
 }
 #img4.revealImg5 {
     position: absolute;
     top: 192px;
-    left: 192px;
+    left: 50%;
+    margin-left: 64px;
 }
 
 #img0.revealImg6 {
     position: absolute;
     top: 0px;
-    left: 32px;
+    left: 50%;
+    margin-left: -96px;
 }
 #img1.revealImg6 {
     position: absolute;
     top: 0px;
-    left: 160px;
+    left: 50%;
+    margin-left: 32px;
 }
 #img2.revealImg6 {
     position: absolute;
     top: 96px;
-    left: 32px;
+    left: 50%;
+    margin-left: -96px;
 }
 #img3.revealImg6 {
     position: absolute;
     top: 96px;
-    left: 160px;
+    left: 50%;
+    margin-left: 32px;
 }
 #img4.revealImg6 {
     position: absolute;
     top: 192px;
-    left: 32px;
+    left: 50%;
+    margin-left: -96px;
 }
 #img5.revealImg6 {
     position: absolute;
     top: 192px;
-    left: 160px;
+    left: 50%;
+    margin-left: 32px;
 }
