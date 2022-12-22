@@ -13,11 +13,13 @@ h1, p {
 .cryButton {
     border-radius: 20px;
     border: 2px solid #000000;
-    background-color: white;
+    background-color: #dddddd;
     padding: 5px;
     margin: 15px;
-    filter: drop-shadow(10px 10px 5px #000000);
+    filter: drop-shadow(10px 10px 5px #000000); /*not skip??*/
+}
 
+.cryButton, .toggleSwitch, #genSelector, #skipButton {
     /* make the text unhighlightable. */
     user-select: none;
     -moz-user-select: none;
@@ -112,12 +114,48 @@ h1, p {
     height: 64px;
 }
 
+.toggleInput {
+    display: none;
+}
+
+.toggleInput:checked + .toggleSwitch .toggleSlider {
+    margin-left: -100%;
+}
+
+.toggleSlider {
+    display: block;
+    width: 200%;
+    transition: 0.3s ease-in 0s;
+}
+
+.toggleSlider::before, .toggleSlider::after {
+    display: inline-block;
+    width: 50%;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 10px 15px;
+}
+
+.toggleSwitch {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #000000;
+    border-radius: 20px;
+    height: 40px;
+}
+
+.toggleWrapper {
+    display: inline-block;
+}
+
 .unselectedGen {
     filter: grayscale(2);
     color: white;
 }
 
-#answerContainer {
+#answerContainer, #statsContainer {
     text-align: center;
     position: relative;
 }
@@ -125,6 +163,11 @@ h1, p {
 #answerImg {
     position: relative;
     height: 260px;
+}
+
+#containerContainer {
+    display: flex;
+    justify-content: space-around;
 }
 
 #dropdown {
@@ -135,6 +178,10 @@ h1, p {
     overflow-y: scroll;
     height: 300px;
     width: 300px;
+}
+
+#dropdown, .listItem {
+    background-color: #555555;
 }
 
 #selectedItem {
@@ -221,15 +268,6 @@ h1, p {
     border: 2px solid #000000;
 }
 
-#genSelector {
-    /* make the text unhighlightable. */
-    user-select: none;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
-}
-
 #showAll {
     border-radius: 20px 0px 0px 20px;
 }
@@ -242,9 +280,38 @@ h1, p {
     background-color: #dddddd;
 }
 
-#dropdown, .listItem {
-    background-color: #555555;
+#skipButton {
+    border-radius: 20px;
+    border: 2px solid #000000;
+    background-color: #dddddd;
+    padding: 5px 15px;
+    width: 100px;
+    margin: 15px;
 }
+
+#skipButton:hover {
+    filter: brightness(75%);
+    cursor: pointer;
+}
+
+#toggleHardcoreSlider::after {
+    content: "Hardcore";
+    background: url("/public/images/0877_hangry.png") no-repeat right / 50px,
+                #7f5f7f;
+    text-align: left;
+}
+
+#toggleHardcoreSlider::before {
+    content: "Normal";
+    background: url("/public/images/0877_full belly.png") no-repeat left / 50px,
+                #ffff7f;
+    text-align: right;
+}
+
+#toggleHardcoreSwitch {
+    width: 120px;
+}
+
 
 #img0.revealImg2 {
     position: absolute;

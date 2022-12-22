@@ -20,15 +20,33 @@
     <main>
         <p>Protip: Enable Audio autoplay in your browser for a seamless experience.<br>
         Protip: Use Ctrl+Space to easily replay audio.</p>
-        <div id="answerContainer">
-            <div id="answerImg"></div>
-            <audio controls id="quizAudio"></audio>
-            <br>
-            <input id="quizInput" autocomplete="off" type="text" placeholder="Type a Pokémon..." size="45">
-            <div hidden id="dropdown">
-                <ul id="searchResults"></ul>
+        <div id="containerContainer">
+            <div id="togglesContainer">
+                <div class="toggleWrapper">
+                    <input type="checkbox" class="toggleInput" id="toggleHardcoreInput">
+                    <label class="toggleSwitch" id="toggleHardcoreSwitch" for="toggleHardcoreInput">
+                        <span class="toggleSlider" id="toggleHardcoreSlider"></span>
+                    </label>
+                </div>
             </div>
-            <p id="completed">Completed:</p>
+            <div id="answerContainer">
+                <div id="answerImg"></div>
+                <audio controls id="quizAudio"></audio>
+                <br>
+                <input id="quizInput" autocomplete="off" type="text" placeholder="Type a Pokémon..." size="45">
+                <div hidden id="dropdown">
+                    <ul id="searchResults"></ul>
+                </div>
+            </div>
+            <div id="statsContainer">
+                <div id="skipButton">
+                    I give up!!!
+                </div>
+                <p id="completed">Completed:</p>
+                <p id="curStreak">Current Streak:</p>
+                <p id="maxStreak">Longest Streak:</p>
+                <p id="skipsUsed">Skips Used:</p>
+            </div>
         </div>
     </main>
 </section>

@@ -9,8 +9,10 @@
     var pkmn = POKEMON.flat(2).filter(x => {return x !== "";}); // filter out pokédex gaps
     var sizes = POKEMON.map(gen => gen.flat(1).filter(x => {return x !== "";}).length);
     var indices = [...pkmn.keys()];
-    var cryIndex = 0;
+    var cryIndex = currStreak = longestStreak = skipsUsed = 0;
     var answer, id, pics;
+    var canSkip = true;
+    var isHardcore = $("#toggleHardcoreInput").is(":checked");
     var answers = POKEMON.flat(2).map((x, i) => typeof x === "string"
                                             ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
                                             : (!x[0].includes(DELIMITER)
@@ -77,6 +79,7 @@
     }
 
     function getOneCry(i) {
+        canSkip = true;
         if (i >= indices.length) return; // maybe put a victory screen here idk
         quizInput.attr("readonly", false);
         answerImg.empty();
@@ -98,10 +101,31 @@
         quizInput.select();
     }
 
+    // do this when the user is correct or gives up
+    function revealAnswer() {
+        quizInput.attr("readonly", true);
+        canSkip = false;
+        dropdown.hide();
+        searchResults.children().each(function() {$(this).show();});
+        $("#selectedItem").removeAttr('id');
+        pics.forEach((x, i) => answerImg.append(
+            $(`<img src="/public/images/${x.replace("%", "%25")}.png" class="revealImg${pics.length}" id="img${i}">`)));
+        answerImg.append("<br>");
+        quizAudio.trigger("play");
+    }
+
+    function resetStats() {
+        cryIndex = currStreak = longestStreak = skipsUsed = 0;
+        $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+        $("#curStreak").text(`Current Streak: ${currStreak}`);
+        $("#maxStreak").text(`Longest Streak: ${longestStreak}`);
+        $("#skipsUsed").text(`Skips Used: ${skipsUsed}`);
+    }
+
     shuffle(indices);
     getOneCry(cryIndex);
     for (let x of answers) searchResults.append(`<li class="listItem">${x}</li>`);
-    $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+    resetStats();
 
     quizInput.focus(function() {
         if (quizInput.is('[readonly]')) return;
@@ -132,18 +156,30 @@
         }
 
         // 13 => enter key
-        if (event.which !== 13 || quizInput.val() !== answer || quizInput.is('[readonly]')) return;
+        if (event.which !== 13 || quizInput.is('[readonly]')
+            || (quizInput.val() !== answer && !isHardcore)
+            || (isHardcore && !answers.includes(quizInput.val()))) return;
         event.preventDefault();
 
-        quizInput.attr("readonly", true);
-        dropdown.hide();
-        searchResults.children().each(function() {$(this).show();});
-        $("#selectedItem").removeAttr('id');
-        pics.forEach((x, i) => answerImg.append(
-            $(`<img src="/public/images/${x.replace("%", "%25")}.png" class="revealImg${pics.length}" id="img${i}">`)));
-        answerImg.append("<br>");
-        quizAudio.trigger("play");
+        revealAnswer();
         $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
+        if (isHardcore && quizInput.val() !== answer) {
+            currStreak = -1; // will be incremented to 0 on display
+            quizInput.val(answer);
+
+            // flash the screen red
+            bg = $("body").css("background-color");
+            $("body").css({ "background-color": "red", "-webkit-transition": "none", "-moz-transition": "none",
+                            "-ms-transition": "none", "-o-transition": "none", "transition": "none" });
+            timeout = setTimeout(function () {$("body").css({
+                                                "background-color": bg, "-webkit-transition": "background 0.5s linear",
+                                                "-moz-transition": "background 0.5s linear", "-ms-transition": "background 0.5s linear",
+                                                "-o-transition": "background 0.5s linear", "transition": "background 0.5s linear"
+                                            });}, 1); // do this 1ms later
+        }
+        $("#curStreak").text(`Current streak: ${++currStreak}`);
+        if (currStreak > longestStreak)
+            $("#maxStreak").text(`Longest streak: ${longestStreak = currStreak}`);
         timeout = setTimeout(getOneCry, 4000, cryIndex);
     });
 
@@ -166,8 +202,7 @@
             indices = shuffle($(element).attr("class").includes("unselectedGen")
                                 ? indices.filter((x, i) => x < start || x >= start + sizes[index])
                                 : indices.concat([...Array(sizes[index]).keys()].map(x => x + start)));
-            cryIndex = 0;
-            $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+            resetStats();
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
@@ -177,8 +212,7 @@
         event.preventDefault();
         genList.children().removeClass("unselectedGen");
         indices = shuffle([...pkmn.keys()]);
-        cryIndex = 0;
-        $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+        resetStats();
         clearTimeout(timeout);
         getOneCry(cryIndex);
     });
@@ -187,10 +221,25 @@
         event.preventDefault();
         genList.children().addClass("unselectedGen");
         indices = [];
-        cryIndex = 0;
-        $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+        resetStats();
         clearTimeout(timeout);
         getOneCry(cryIndex);
+    });
+
+    $("#skipButton").click(function (event) {
+        if (!canSkip) return;
+        event.preventDefault();
+
+        quizInput.val(answer);
+        revealAnswer();
+        $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
+        $("#curStreak").text(`Current streak: ${currStreak = 0}`);
+        $("#skipsUsed").text(`Skips used: ${++skipsUsed}`);
+        timeout = setTimeout(getOneCry, 4000, cryIndex);
+    });
+
+    $("#toggleHardcoreSlider").click(function (event) {
+        isHardcore = !isHardcore;
     });
 
     $(document).keydown(function (event) {

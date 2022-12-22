@@ -344,7 +344,9 @@ const POKEMON = [[
     "Fletchling", "Fletchinder", "Talonflame",
     "Scatterbug", "Spewpa", "Vivillon",
     "Litleo", "Pyroar",
-    "Flabébé", [["Floette", "Floette_Eternal"]], "Florges", // flower colors?????
+    [["Flabébé_Red", "Flabébé_Yellow", "Flabébé_Orange", "Flabébé_Blue", "Flabébé_White"]],
+    [["Floette_Red", "Floette_Yellow", "Floette_Orange", "Floette_Blue", "Floette_White", "Floette_Eternal"]],
+    [["Florges_Red", "Florges_Yellow", "Florges_Orange", "Florges_Blue", "Florges_White"]],
     "Skiddo", "Gogoat",
     "Pancham", "Pangoro",
     "Furfrou",
@@ -488,6 +490,7 @@ const POKEMON = [[
     "Tinkatink", "Tinkatuff", "Tinkaton",
     "Wiglett", "Wugtrio",
     "Bombirdier",
+    // "Finizen", ["Palafin_Zero", "Palafin_Hero"],
     [["Finizen", ["964_Palafin_Zero"]]], ["Palafin_Hero"],
     "Varoom", "Revavroom",
     "Cyclizar",
