@@ -12,7 +12,9 @@
     var cryIndex = currStreak = longestStreak = skipsUsed = 0;
     var answer, id, pics;
     var canSkip = true;
+    var canUnpause = false;
     var isHardcore = $("#toggleHardcoreInput").is(":checked");
+    var isFast = $("#toggleSlowInput").is(":checked");
     var answers = POKEMON.flat(2).map((x, i) => typeof x === "string"
                                             ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
                                             : (!x[0].includes(DELIMITER)
@@ -101,6 +103,20 @@
         quizInput.select();
     }
 
+    async function awaitEnter() {
+        await new Promise((resolve) => {
+            document.addEventListener('keydown', waitForEnter);
+            function waitForEnter(e) {
+                // 13 => enter key
+                if  (e.keyCode === 13) {
+                    document.removeEventListener('keydown', waitForEnter);
+                    resolve();
+                }
+            }
+        });
+        getOneCry(cryIndex);
+    }
+
     // do this when the user is correct or gives up
     function revealAnswer() {
         quizInput.attr("readonly", true);
@@ -117,9 +133,9 @@
     function resetStats() {
         cryIndex = currStreak = longestStreak = skipsUsed = 0;
         $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
-        $("#curStreak").text(`Current Streak: ${currStreak}`);
-        $("#maxStreak").text(`Longest Streak: ${longestStreak}`);
-        $("#skipsUsed").text(`Skips Used: ${skipsUsed}`);
+        $("#curStreak").text(`Current streak: ${currStreak}`);
+        $("#maxStreak").text(`Longest streak: ${longestStreak}`);
+        $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
     }
 
     shuffle(indices);
@@ -180,7 +196,10 @@
         $("#curStreak").text(`Current streak: ${++currStreak}`);
         if (currStreak > longestStreak)
             $("#maxStreak").text(`Longest streak: ${longestStreak = currStreak}`);
-        timeout = setTimeout(getOneCry, 4000, cryIndex);
+        if (isFast)
+            timeout = setTimeout(getOneCry, 4000, cryIndex);
+        else
+            timeout = setTimeout(awaitEnter, quizAudio[0].duration * 1000); // wait until the cry finishes
     });
 
     $(".listItem").each(function () {
@@ -240,6 +259,10 @@
 
     $("#toggleHardcoreSlider").click(function (event) {
         isHardcore = !isHardcore;
+    });
+
+    $("#toggleSlowSlider").click(function (event) {
+        isFast = !isFast;
     });
 
     $(document).keydown(function (event) {

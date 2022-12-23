@@ -125,7 +125,7 @@ h1, p {
 .toggleSlider {
     display: block;
     width: 200%;
-    transition: 0.3s ease-in 0s;
+    transition: 0.2s ease-in 0s;
 }
 
 .toggleSlider::before, .toggleSlider::after {
@@ -309,6 +309,24 @@ h1, p {
 }
 
 #toggleHardcoreSwitch {
+    width: 120px;
+}
+
+#toggleSlowSlider::after {
+    content: "Fast";
+    background: url("/public/images/0617.png") no-repeat right / 50px,
+                #5f7f9f;
+    text-align: left;
+}
+
+#toggleSlowSlider::before {
+    content: "Slow";
+    background: url("/public/images/0616.png") no-repeat left / 50px,
+                #ffffe7;
+    text-align: right;
+}
+
+#toggleSlowSwitch {
     width: 120px;
 }
 
