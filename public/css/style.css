@@ -99,10 +99,16 @@ h1, p {
     text-align: left;
 }
 
+.retro {
+    image-rendering: pixelated;
+    object-fit: contain;
+}
+
 .revealImg1 {
     width: 256px;
     height: 256px;
 }
+
 
 .revealImg2, .revealImg3, .revealImg4 {
     width: 128px;
@@ -143,6 +149,7 @@ h1, p {
     cursor: pointer;
     border: 2px solid #000000;
     border-radius: 20px;
+    width: 120px;
     height: 40px;
 }
 
@@ -155,7 +162,7 @@ h1, p {
     color: white;
 }
 
-#answerContainer, #statsContainer {
+#answerContainer, #statsContainer, #togglesContainer {
     text-align: center;
     position: relative;
 }
@@ -308,10 +315,6 @@ h1, p {
     text-align: right;
 }
 
-#toggleHardcoreSwitch {
-    width: 120px;
-}
-
 #toggleSlowSlider::after {
     content: "Fast";
     background: url("/public/images/0617.png") no-repeat right / 50px,
@@ -326,8 +329,18 @@ h1, p {
     text-align: right;
 }
 
-#toggleSlowSwitch {
-    width: 120px;
+#toggleRetroSlider::after {
+    content: "Modern";
+    background: url("/public/images/0025.png") no-repeat right / 50px,
+                #ffdf00;
+    text-align: left;
+}
+
+#toggleRetroSlider::before {
+    content: "Retro";
+    background: url("/public/images/old/025.gif") no-repeat left / 50px,
+                #ffef4f;
+    text-align: right;
 }
 
 

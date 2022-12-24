@@ -221,7 +221,7 @@ const POKEMON = [[
     "Combee", "Vespiquen",
     "Pachirisu",
     "Buizel", "Floatzel",
-    "Cherubi", [["Cherrim_Overcast", "Cherrim_Sunny"]],
+    "Cherubi", [["Cherrim_Overcast", "Cherrim_Sunshine"]],
     [["Shellos_West Sea", "Shellos_East Sea"]], [["Gastrodon_West Sea", "Gastrodon_East Sea"]],
     "Ambipom",
     "Drifloon", "Drifblim",
@@ -511,3 +511,16 @@ const POKEMON = [[
     "Roaring Moon", "Iron Valiant",
     "Koraidon", "Miraidon"
 ]];
+
+// retro mode filter tools
+const OLD_CRIES = ["Shaymin_Land", "Shaymin_Sky", "Tornadus_Incarnate", "Tornadus_Therian",
+                "Thundurus_Incarnate", "Thundurus_Therian", "Landorus_Incarnate", "Landorus_Therian",
+                "Kyurem_White", "Kyurem_Black"];
+const OLD_FORMS = ["Castform_Sunny", "Castform_Rainy", "Castform_Snowy", "Deoxys_Attack", "Deoxys_Defense",
+                "Deoxys_Speed", "Burmy_Plant", "Burmy_Sandy", "Burmy_Trash", "Wormadam_Plant",
+                "Wormadam_Sandy", "Wormadam_Trash", "Cherrim_Overcast", "Cherrim_Sunshine", "Shellos_West Sea",
+                "Shellos_East Sea", "Gastrodon_West Sea", "Gastrodon_East Sea", "Rotom_Heat", "Rotom_Wash",
+                "Rotom_Frost", "Rotom_Fan", "Rotom_Mow", "Giratina_Altered", "Giratina_Origin", "Basculin_Red",
+                "Basculin_Blue", "Darmanitan_Standard", "Darmanitan_Zen", "Deerling_Spring", "Deerling_Summer",
+                "Deerling_Autumn", "Deerling_Winter", "Sawsbuck_Spring", "Sawsbuck_Summer", "Sawsbuck_Autumn",
+                "Sawsbuck_Winter", "Keldeo_Ordinary", "Keldeo_Resolute", "Meloetta_Aria", "Meloetta_Pirouette"];
