@@ -51,12 +51,12 @@
                                 return [`${j[0].substring(0, j[0].indexOf(DELIMITER))} (${j[0].substring(j[0].indexOf(DELIMITER) + 1)})`,
                                         `${("000" + (i + 1)).slice(-4)}${j[0].substring(j[0].indexOf(DELIMITER)).toLowerCase()}`];
                             else
-                                return [j.every((v) => typeof v === "string")
+                                return [j.every(v => typeof v === "string")
                                         ? j[0].includes(DELIMITER)
                                             ? j[0].substring(0, j[0].indexOf(DELIMITER))
                                             : j[0]
                                         // this is designed to handle only Finizen atm, could break later
-                                        : j.map((v) => typeof v === "string"
+                                        : j.map(v => typeof v === "string"
                                                 ? v
                                                 : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "),
                                         `${("000" + (i + 1)).slice(-4)}`];
@@ -79,22 +79,23 @@
     }
 
     function getAnswers(list) {
-        return list.map((x, i) => typeof x === "string"
-                                    ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
-                                    : (!x[0].includes(DELIMITER)
-                                        ? (x.every((v) => typeof v === "string")
-                                            ? x[0]
-                                            // this is designed to handle only Finizen atm, could break later
-                                            // (["Finizen", ["964_Palafin_Zero", "..."]] or ["Finizen", ["964_Palafin_Zero"], ["..."]])???
-                                            // currently handles the second but maybe first is more robust
-                                            // will leave it until i have reason to fix
-                                            : x.map((v) => typeof v === "string"
-                                                    ? v
-                                                    : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "))
-                                        : x[0].includes(POKEMON.flat(2)[i - 1])
-                                        ? `${x[0].replace(DELIMITER, " (")})`
-                                        : x[0].substring(0, x[0].indexOf(DELIMITER))))
-                                .sort();
+        return list.map(
+            (x, i) => typeof x === "string"
+                    ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
+                    : (!x[0].includes(DELIMITER)
+                        ? (x.every((v) => typeof v === "string")
+                            ? x[0]
+                            // this is designed to handle only Finizen atm, could break later
+                            // (["Finizen", ["964_Palafin_Zero", "..."]] or ["Finizen", ["964_Palafin_Zero"], ["..."]])???
+                            // currently handles the second but maybe first is more robust
+                            // will leave it until i have reason to fix
+                            : x.map((v) => typeof v === "string"
+                                    ? v
+                                    : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "))
+                        : x[0].includes(POKEMON.flat(2)[i - 1])
+                        ? `${x[0].replace(DELIMITER, " (")})`
+                        : x[0].substring(0, x[0].indexOf(DELIMITER))))
+                .sort();
     }
 
     // shuffle the indices (Fisher-Yates algorithm)
@@ -194,15 +195,6 @@
         $("#genList").children().slice(5).each(function() {$(this).hide();});
         $("#genList").children().slice(0, 5).each(function() {
             $(this).css("background", $(this).css("background").replace(/\/images\/0/g, "/images/old/").replace(/png/g, "gif"));
-        });
-        $(".revealImg1").css({
-            "image-rendering": "pixelated", "width": "200%", "height": "200%"
-        });
-        $(".revealImg2, .revealImg3, .revealImg4").css({
-            "image-rendering": "pixelated", "width": "100%", "height": "100%"
-        });
-        $(".revealImg5, .revealImg6").css({
-            "image-rendering": "pixelated", "width": "50%", "height": "50%"
         });
     }
     shuffle(indices);
@@ -327,15 +319,6 @@
             $("#genList").children().slice(0, 5).each(function() {
                 $(this).css("background", $(this).css("background").replace(/\/images\/old\//g, "/images/0").replace(/gif/g, "png"));
             });
-            $(".revealImg1").css({
-                "image-rendering": "auto", "width": "256px", "height": "256px"
-            });
-            $(".revealImg2, .revealImg3, .revealImg4").css({
-                "image-rendering": "auto", "width": "128px", "height": "128px"
-            });
-            $(".revealImg5, .revealImg6").css({
-                "image-rendering": "auto", "width": "64px", "height": "64px"
-            });
             indices = shuffle(genList.children().toArray().reduce(
                 ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen")
                                             ? [idxs.concat([...Array(sizes[i]).keys()].map(x => x + start)),
@@ -351,16 +334,6 @@
             $("#genList").children().slice(0, 5).each(function() {
                 $(this).css("background", $(this).css("background").replace(/\/images\/0/g, "/images/old/").replace(/png/g, "gif"));
             });
-            $(".revealImg1").css({
-                "image-rendering": "pixelated", "width": "200%", "height": "200%"
-            });
-            $(".revealImg2, .revealImg3, .revealImg4").css({
-                "image-rendering": "pixelated", "width": "100%", "height": "100%"
-            });
-            $(".revealImg5, .revealImg6").css({
-                "image-rendering": "pixelated", "width": "50%", "height": "50%"
-            });
-            console.log($("#answerImg").css("image-rendering"));
             indices = shuffle(genList.children().toArray().reduce(
                 ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen") && $(child).is(":visible")
                                             ? [idxs.concat([...Array(old_sizes[i]).keys()].map(x => x + start)),
@@ -371,8 +344,8 @@
         }
         populateDropdown();
         resetStats();
+        clearTimeout(timeout);
         getOneCry(cryIndex);
-        // timeout = setTimeout(getOneCry, 1, cryIndex);
     });
 
     $(document).keydown(function (event) {
