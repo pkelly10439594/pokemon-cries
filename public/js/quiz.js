@@ -31,8 +31,18 @@
             }
         )
     );
+    const SIMPLE_POKEMON = POKEMON.map(
+        gen => gen.map(
+            species => typeof species === "string"
+                    ? species
+                    : typeof species[0] === "string"
+                        ? species[0].split(DELIMITER)[0]
+                        : species[0][0].split(DELIMITER)[0]
+        )
+    );
     var sizes = POKEMON.map(gen => gen.flat(1).filter(x => x !== "").length);
     var old_sizes = [151, 100, 135, 108, 161];
+    var simple_sizes = POKEMON.map(gen => gen.length);
     var indices;
     var cryIndex = currStreak = longestStreak = skipsUsed = 0;
     var answers;
@@ -128,6 +138,9 @@
                                 : ("000" + x[0].slice(0, x[0].indexOf(DELIMITER))).slice(-4)
                                     + DELIMITER
                                     + x[0].split(DELIMITER).pop().toLowerCase());
+        console.log(answer);
+        console.log(id);
+        console.log(pics);
         quizAudio.attr("src", `/public/cries/${id.replace("%", "%25")}.mp3`);
         quizAudio.trigger("play");
         quizInput.select();
@@ -311,7 +324,7 @@
     });
 
     $("#toggleRetroInput").click(function (event) {
-        if ($("#toggleRetroInput").is(":checked")) {
+        if ($(this).is(":checked")) {
             // entering modern mode
 
             // show all gens after the first 5
@@ -342,6 +355,20 @@
                 [[], 0])[0]);
             answers = getAnswers(OLD_POKEMON.flat(2));
         }
+        populateDropdown();
+        resetStats();
+        clearTimeout(timeout);
+        getOneCry(cryIndex);
+    });
+
+    $("#toggleSimpleInput").click(function (event) {
+        let cur_sizes = $(this).is(":checked") ? sizes : simple_sizes;
+        indices = shuffle(genList.children().toArray().reduce(
+            ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen") && $(child).is(":visible")
+                                        ? [idxs.concat([...Array(cur_sizes[i]).keys()].map(x => x + start)),
+                                            start + cur_sizes[i]]
+                                        : [idxs, start + cur_sizes[i]],
+            [[], 0])[0]);
         populateDropdown();
         resetStats();
         clearTimeout(timeout);

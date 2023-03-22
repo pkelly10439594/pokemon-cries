@@ -149,7 +149,7 @@ h1, p {
     cursor: pointer;
     border: 2px solid #000000;
     border-radius: 20px;
-    width: 120px;
+    width: 150px;
     height: 40px;
 }
 
@@ -340,6 +340,20 @@ h1, p {
     content: "Retro";
     background: url("/public/images/old/025.gif") no-repeat left / 50px,
                 #ffef4f;
+    text-align: right;
+}
+
+#toggleSimpleSlider::after {
+    content: "Expanded";
+    background: url("/public/images/0746_school.png") no-repeat right / 50px,
+                #2f7fbf;
+    text-align: left;
+}
+
+#toggleSimpleSlider::before {
+    content: "Simple";
+    background: url("/public/images/0746_solo.png") no-repeat left / 50px,
+                #bfcfcf;
     text-align: right;
 }
 
