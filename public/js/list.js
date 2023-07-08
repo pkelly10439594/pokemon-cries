@@ -9,7 +9,7 @@
         return $(`
             <div class="cryButton gen${gen + 1}" id="${cryTag}">
                 ${pkmnNames.reduce((a, b, i) => a + `
-                    <img src="/public/images/${fileNames[i]}${extensions[i].replace("%", "%25")}.png" class="cryImg">
+                    <img src="/public/images/modern/mini/${fileNames[i]}${extensions[i].replace("%", "%25")}.png" class="cryImg">
                     ${b.indexOf(DELIMITER) === -1 ? b : b.replace(DELIMITER, " (").concat(")")}
                 `, "")}
             </div>
@@ -77,7 +77,7 @@
         $(element).hide();
         $(element).click(function(event) {
             event.preventDefault();
-            new Audio(`/public/cries/${$(this).attr("id").replace("%", "%25")}.mp3`).play();
+            new Audio(`/public/cries/modern/${$(this).attr("id").replace("%", "%25")}.mp3`).play();
         });
     });
     pkmnList.show();

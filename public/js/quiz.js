@@ -118,7 +118,8 @@
     }
 
     function getOneCry(i) {
-        let pkmnList = $("#toggleRetroInput").is(":checked") ? POKEMON : OLD_POKEMON;
+        let isModern = $("#toggleRetroInput").is(":checked");
+        let pkmnList = isModern ? POKEMON : OLD_POKEMON;
         canSkip = true;
         if (i >= indices.length) return; // maybe put a victory screen here idk
         quizInput.attr("readonly", false);
@@ -126,8 +127,7 @@
         quizInput.val('');
         let mon = pkmnList.flat(2)[indices[i]];
         [answer, id] = findId(mon, pkmnList);
-        if (!$("#toggleRetroInput").is(":checked"))
-            id = `old/${id.slice(1)}`;
+        id = isModern ? `modern/${id}` : `old/${id.slice(1)}`;
         pics = typeof mon === "string"
                     ? [id]
                     : mon.map(x => typeof x === "string"
@@ -207,7 +207,7 @@
         answers = getAnswers(OLD_POKEMON.flat(2));
         $("#genList").children().slice(5).each(function() {$(this).hide();});
         $("#genList").children().slice(0, 5).each(function() {
-            $(this).css("background", $(this).css("background").replace(/\/images\/0/g, "/images/old/").replace(/png/g, "gif"));
+            $(this).css("background", $(this).css("background").replace(/\/modern\/0/g, "/old/").replace(/png/g, "gif"));
         });
     }
     shuffle(indices);
@@ -330,7 +330,7 @@
             // show all gens after the first 5
             $("#genList").children().slice(5).each(function() {$(this).show();});
             $("#genList").children().slice(0, 5).each(function() {
-                $(this).css("background", $(this).css("background").replace(/\/images\/old\//g, "/images/0").replace(/gif/g, "png"));
+                $(this).css("background", $(this).css("background").replace(/\/old\//g, "/modern/0").replace(/gif/g, "png"));
             });
             indices = shuffle(genList.children().toArray().reduce(
                 ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen")
@@ -345,7 +345,7 @@
             // hide all gens after the first 5
             $("#genList").children().slice(5).each(function() {$(this).hide();});
             $("#genList").children().slice(0, 5).each(function() {
-                $(this).css("background", $(this).css("background").replace(/\/images\/0/g, "/images/old/").replace(/png/g, "gif"));
+                $(this).css("background", $(this).css("background").replace(/\/modern\/0/g, "/old/").replace(/png/g, "gif"));
             });
             indices = shuffle(genList.children().toArray().reduce(
                 ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen") && $(child).is(":visible")

@@ -218,56 +218,56 @@ h1, p {
 }
 
 #genList1 {
-    background: url("/public/images/0006.png") no-repeat left / 50px,
-                url("/public/images/0009.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0006.png") no-repeat left / 50px,
+                url("/public/images/modern/0009.png") no-repeat right / 50px,
                 linear-gradient(120deg, #FF1111 20%, #1111FF 80%);
 }
 
 #genList2 {
-    background: url("/public/images/0250.png") no-repeat left / 50px,
-                url("/public/images/0249.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0250.png") no-repeat left / 50px,
+                url("/public/images/modern/0249.png") no-repeat right / 50px,
                 linear-gradient(120deg, #DAA520 20%, #C0C0C0 80%);
 }
 
 #genList3 {
-    background: url("/public/images/0383.png") no-repeat left / 50px,
-                url("/public/images/0382.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0383.png") no-repeat left / 50px,
+                url("/public/images/modern/0382.png") no-repeat right / 50px,
                 linear-gradient(120deg, #A00000 20%, #0000A0 80%);
 }
 
 #genList4 {
-    background: url("/public/images/0483.png") no-repeat left / 50px,
-                url("/public/images/0484.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0483.png") no-repeat left / 50px,
+                url("/public/images/modern/0484.png") no-repeat right / 50px,
                 linear-gradient(120deg, #AAAAFF 20%, #FFAAAA 80%);
 }
 
 #genList5 {
-    background: url("/public/images/0643.png") no-repeat left / 50px,
-                url("/public/images/0644.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0643.png") no-repeat left / 50px,
+                url("/public/images/modern/0644.png") no-repeat right / 50px,
                 linear-gradient(120deg, #444444 20%, #E1E1E1 80%);
 }
 
 #genList6 {
-    background: url("/public/images/0716.png") no-repeat left / 50px,
-                url("/public/images/0717.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0716.png") no-repeat left / 50px,
+                url("/public/images/modern/0717.png") no-repeat right / 50px,
                 linear-gradient(120deg, #025DA6 20%, #EA1A3E 80%);
 }
 
 #genList7 {
-    background: url("/public/images/0791.png") no-repeat left / 50px,
-                url("/public/images/0792.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0791.png") no-repeat left / 50px,
+                url("/public/images/modern/0792.png") no-repeat right / 50px,
                 linear-gradient(120deg, #F1912B 20%, #5599CA 80%);
 }
 
 #genList8 {
-    background: url("/public/images/0888_crowned sword.png") no-repeat left / 50px,
-                url("/public/images/0889_crowned shield.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0888_crowned sword.png") no-repeat left / 50px,
+                url("/public/images/modern/0889_crowned shield.png") no-repeat right / 50px,
                 linear-gradient(120deg, #00A1E9 20%, #BF004F 80%);
 }
 
 #genList9 {
-    background: url("/public/images/1007.png") no-repeat left / 50px,
-                url("/public/images/1008.png") no-repeat right / 50px,
+    background: url("/public/images/modern/1007.png") no-repeat left / 50px,
+                url("/public/images/modern/1008.png") no-repeat right / 50px,
                 linear-gradient(120deg, #F34134 20%, #8334B7 80%);
 }
 
@@ -303,35 +303,35 @@ h1, p {
 
 #toggleHardcoreSlider::after {
     content: "Hardcore";
-    background: url("/public/images/0877_hangry.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0877_hangry.png") no-repeat right / 50px,
                 #7f5f7f;
     text-align: left;
 }
 
 #toggleHardcoreSlider::before {
     content: "Normal";
-    background: url("/public/images/0877_full belly.png") no-repeat left / 50px,
+    background: url("/public/images/modern/0877_full belly.png") no-repeat left / 50px,
                 #ffff7f;
     text-align: right;
 }
 
 #toggleSlowSlider::after {
     content: "Fast";
-    background: url("/public/images/0617.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0617.png") no-repeat right / 50px,
                 #5f7f9f;
     text-align: left;
 }
 
 #toggleSlowSlider::before {
     content: "Slow";
-    background: url("/public/images/0616.png") no-repeat left / 50px,
+    background: url("/public/images/modern/0616.png") no-repeat left / 50px,
                 #ffffe7;
     text-align: right;
 }
 
 #toggleRetroSlider::after {
     content: "Modern";
-    background: url("/public/images/0025.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0025.png") no-repeat right / 50px,
                 #ffdf00;
     text-align: left;
 }
@@ -345,14 +345,14 @@ h1, p {
 
 #toggleSimpleSlider::after {
     content: "Expanded";
-    background: url("/public/images/0746_school.png") no-repeat right / 50px,
+    background: url("/public/images/modern/0746_school.png") no-repeat right / 50px,
                 #2f7fbf;
     text-align: left;
 }
 
 #toggleSimpleSlider::before {
     content: "Simple";
-    background: url("/public/images/0746_solo.png") no-repeat left / 50px,
+    background: url("/public/images/modern/0746_solo.png") no-repeat left / 50px,
                 #bfcfcf;
     text-align: right;
 }
