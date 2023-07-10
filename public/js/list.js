@@ -4,6 +4,7 @@
     var genList = $("#genList");
     var pkmnIndex = 0;
     var pkmnList = $("#pkmnList");
+    var POKEMON = POKEMON_EN;
 
     function getPkmnCryHTML(pkmnNames, extensions, fileNames, cryTag, gen) {
         return $(`
@@ -26,6 +27,8 @@
 
             if (typeof(species) === 'string') // element only has one cry
                 pkmnList.append(getPkmnCryHTML([species], [""], [indAsStr], indAsStr, generation));
+            else if (pkmnIndex === 982) // dudunsparce is a special case because it has two forms but one minisprite
+                pkmnList.append(getPkmnCryHTML(species[0][0].split(DELIMITER, 1), [""], [indAsStr], indAsStr, generation));
             else // element is a species with multiple cries
                 species.forEach((cry) => {
                     if (typeof(cry) === 'string') { // this cry only has one form
@@ -102,5 +105,43 @@
         for (let g = 1; g <= POKEMON.length; g++)
             $(`.gen${g}`).each(function (i, e) {$(e).hide()});
         genList.children().addClass("unselectedGen");
+    });
+
+    $("#langList").children().each(function (langIdx, langBtn) {
+        $(langBtn).click(function (event) {
+            event.preventDefault();
+            switch ($(langBtn).attr("id")) {
+                case "langEN": POKEMON = POKEMON_EN; break;
+                case "langJP": POKEMON = POKEMON_JP; break;
+                case "langFR": POKEMON = POKEMON_FR; break;
+                case "langES": POKEMON = POKEMON_ES; break;
+                case "langDE": POKEMON = POKEMON_DE; break;
+                case "langIT": POKEMON = POKEMON_IT; break;
+                case "langKR": POKEMON = POKEMON_KR; break;
+                case "langZH_T": POKEMON = POKEMON_ZH_T; break;
+                case "langZH_S": POKEMON = POKEMON_ZH_S; break;
+                default:
+                    "YIKES!!";
+                    break;
+            }
+
+            let pkmnFlat = POKEMON.flat(2);
+            pkmnList.children().each(function (cryIndex, element) {
+                if (typeof pkmnFlat[cryIndex] === 'string')
+                    $(element).children()[0].nextSibling.nodeValue = pkmnFlat[cryIndex].includes(DELIMITER)
+                                                                        ? pkmnFlat[cryIndex].replace(DELIMITER, " (").concat(")")
+                                                                        : pkmnFlat[cryIndex];
+                else if ($(element).children().length === 1) // some pokemon may have two forms but one minisprite
+                    $(element).children()[0].nextSibling.nodeValue = pkmnFlat[cryIndex][0].split(DELIMITER)[0];
+                else
+                    $(element).children().each(function (formIndex, e) {
+                        $(e)[0].nextSibling.nodeValue = typeof pkmnFlat[cryIndex][formIndex] === "string"
+                                                        ? pkmnFlat[cryIndex][formIndex].includes(DELIMITER)
+                                                            ? pkmnFlat[cryIndex][formIndex].replace(DELIMITER, " (").concat(")")
+                                                            : pkmnFlat[cryIndex][formIndex]
+                                                        : pkmnFlat[cryIndex][formIndex][0].split(DELIMITER).slice(-2).join(" (").concat(")");
+                    });
+            });
+        });
     });
 })(window.jQuery);

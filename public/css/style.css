@@ -19,7 +19,7 @@ h1, p {
     filter: drop-shadow(10px 10px 5px #000000); /*not skip??*/
 }
 
-.cryButton, .toggleSwitch, #genSelector, #skipButton {
+.cryButton, .toggleSwitch, #genSelector, #langSelector, #skipButton {
     /* make the text unhighlightable. */
     user-select: none;
     -moz-user-select: none;
@@ -79,17 +79,20 @@ h1, p {
     background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
 }
 
-.genList {
+.genList, .langList {
     padding: 10px;
     cursor: pointer;
-    min-width: 150px;
     height: 10px;
     text-align: center;
     line-height: 10px;
     color: black;
 }
 
-.genList:hover {
+.genList {
+    min-width: 150px;
+}
+
+.genList:hover, .langList:hover {
     filter: brightness(75%);
     color: black;
 }
@@ -196,7 +199,7 @@ h1, p {
     cursor: pointer;
 }
 
-#genList {
+#genList, #langList {
     padding: 0;
     background: #000000;
     border: 2px solid #000000;
@@ -205,7 +208,7 @@ h1, p {
     overflow: hidden;
 }
 
-#genList, #genListExtras {
+#genList, #genListExtras, #langList {
     list-style-type: none;
     display: flex;
     justify-content: center;
@@ -213,7 +216,7 @@ h1, p {
     overflow: hidden;
 }
 
-#genList > .genList {
+#genList > .genList, #langList > .langList {
     flex: 1 0 auto;
 }
 
@@ -283,7 +286,7 @@ h1, p {
     border-radius: 0px 20px 20px 0px;
 }
 
-#showAll, #showNone {
+#showAll, #showNone, .langList {
     background-color: #dddddd;
 }
 

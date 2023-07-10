@@ -6,6 +6,7 @@
     var searchResults = $("#searchResults");
     var genList = $("#genList");
     var timeout; // timeout for correct guess
+    var POKEMON = POKEMON_EN;
     var pkmn = POKEMON.flat(2).filter(x => x !== ""); // filter out pokédex gaps
     const OLD_POKEMON = POKEMON.slice(0, 5).map(
         gen => gen.map(
