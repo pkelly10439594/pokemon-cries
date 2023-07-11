@@ -121,17 +121,20 @@
     function getOneCry(i) {
         let isModern = $("#toggleRetroInput").is(":checked");
         let pkmnList = isModern ? POKEMON : OLD_POKEMON;
+        let pkmnListEN = isModern ? POKEMON_EN : OLD_POKEMON;
         canSkip = true;
         if (i >= indices.length) return; // maybe put a victory screen here idk
         quizInput.attr("readonly", false);
         answerImg.empty();
         quizInput.val('');
         let mon = pkmnList.flat(2)[indices[i]];
-        [answer, id] = findId(mon, pkmnList);
+        let monEN = pkmnListEN.flat(2)[indices[i]];
+        [answer, _] = findId(mon, pkmnList);
+        [_, id] = findId(monEN, pkmnListEN);
         id = isModern ? `modern/${id}` : `old/${id.slice(1)}`;
-        pics = typeof mon === "string"
+        pics = typeof monEN === "string"
                     ? [id]
-                    : mon.map(x => typeof x === "string"
+                    : monEN.map(x => typeof x === "string"
                                 ? !x.includes(DELIMITER)
                                     ? id
                                     : id.split(DELIMITER)[0] + x.substring(x.indexOf(DELIMITER)).toLowerCase()
@@ -322,6 +325,32 @@
         $("#curStreak").text(`Current streak: ${currStreak = 0}`);
         $("#skipsUsed").text(`Skips used: ${++skipsUsed}`);
         timeout = setTimeout(getOneCry, 4000, cryIndex);
+    });
+
+    $("#langList").children().each(function (langIdx, langBtn) {
+        $(langBtn).click(function (event) {
+            event.preventDefault();
+            switch ($(langBtn).attr("id")) {
+                case "langEN": POKEMON = POKEMON_EN; break;
+                case "langJP": POKEMON = POKEMON_JP; break;
+                case "langFR": POKEMON = POKEMON_FR; break;
+                case "langES": POKEMON = POKEMON_ES; break;
+                case "langDE": POKEMON = POKEMON_DE; break;
+                case "langIT": POKEMON = POKEMON_IT; break;
+                case "langKR": POKEMON = POKEMON_KR; break;
+                case "langZH_T": POKEMON = POKEMON_ZH_T; break;
+                case "langZH_S": POKEMON = POKEMON_ZH_S; break;
+                default:
+                    "YIKES!!";
+                    break;
+            }
+
+            pkmn = POKEMON.flat(2).filter(x => x !== "");
+            answers = getAnswers(pkmn);
+            populateDropdown();
+            clearTimeout(timeout);
+            getOneCry(cryIndex);
+        });
     });
 
     $("#toggleRetroInput").click(function (event) {
