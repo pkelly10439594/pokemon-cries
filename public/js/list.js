@@ -111,7 +111,6 @@
         $(langBtn).click(function (event) {
             event.preventDefault();
             switch ($(langBtn).attr("id")) {
-                case "langEN": POKEMON = POKEMON_EN; break;
                 case "langJP": POKEMON = POKEMON_JP; break;
                 case "langFR": POKEMON = POKEMON_FR; break;
                 case "langES": POKEMON = POKEMON_ES; break;
@@ -120,9 +119,9 @@
                 case "langKR": POKEMON = POKEMON_KR; break;
                 case "langZH_T": POKEMON = POKEMON_ZH_T; break;
                 case "langZH_S": POKEMON = POKEMON_ZH_S; break;
-                default:
-                    "YIKES!!";
-                    break;
+                case "langEN":
+                // make the default be english in case the id is unexpected
+                default: POKEMON = POKEMON_EN; break;
             }
 
             let pkmnFlat = POKEMON.flat(2);

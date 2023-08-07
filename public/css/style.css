@@ -119,8 +119,8 @@ h1, p {
 }
 
 .revealImg5, .revealImg6 {
-    width: 64px;
-    height: 64px;
+    width: 84px;
+    height: 84px;
 }
 
 .toggleInput {
@@ -416,68 +416,68 @@ h1, p {
 
 #img0.revealImg5 {
     position: absolute;
-    top: 0px;
+    top: 1px;
     left: 50%;
-    margin-left: -128px;
+    margin-left: -127px;
 }
 #img1.revealImg5 {
     position: absolute;
-    top: 0px;
+    top: 1px;
     left: 50%;
-    margin-left: 64px;
+    margin-left: 43px;
 }
 #img2.revealImg5 {
     position: absolute;
-    top: 96px;
+    top: 86px;
     left: 50%;
-    margin-left: -32px;
+    margin-left: -42px;
 }
 #img3.revealImg5 {
     position: absolute;
-    top: 192px;
+    top: 171px;
     left: 50%;
-    margin-left: -128px;
+    margin-left: -127px;
 }
 #img4.revealImg5 {
     position: absolute;
-    top: 192px;
+    top: 171px;
     left: 50%;
-    margin-left: 64px;
+    margin-left: 43px;
 }
 
 #img0.revealImg6 {
     position: absolute;
-    top: 0px;
+    top: 1px;
     left: 50%;
-    margin-left: -96px;
+    margin-left: -99px;
 }
 #img1.revealImg6 {
     position: absolute;
-    top: 0px;
+    top: 1px;
     left: 50%;
-    margin-left: 32px;
+    margin-left: 15px;
 }
 #img2.revealImg6 {
     position: absolute;
-    top: 96px;
+    top: 86px;
     left: 50%;
-    margin-left: -96px;
+    margin-left: -99px;
 }
 #img3.revealImg6 {
     position: absolute;
-    top: 96px;
+    top: 86px;
     left: 50%;
-    margin-left: 32px;
+    margin-left: 15px;
 }
 #img4.revealImg6 {
     position: absolute;
-    top: 192px;
+    top: 171px;
     left: 50%;
-    margin-left: -96px;
+    margin-left: -99px;
 }
 #img5.revealImg6 {
     position: absolute;
-    top: 192px;
+    top: 171px;
     left: 50%;
-    margin-left: 32px;
+    margin-left: 15px;
 }

@@ -53,21 +53,24 @@
     function findId(mon, pkmnList) {
         // if the pokemon has multiple forms with the same cry
         if (Array.isArray(mon)) {
-            for (let [i, cry] of pkmnList.flat(1).entries())
-                if (Array.isArray(cry))
-                    for (let j of cry)
-                        if (j[0].includes(mon[0])) {
-                            // check for exactly cramorant's situation i think
+            for (let [i, monScan] of pkmnList.flat(1).entries())
+                if (Array.isArray(monScan))
+                    for (let cry of monScan)
+                        if (mon.every((form, formIdx) => form === cry[formIdx])) {
+                            // if there is no definitive first form (so far just Cramorant)
                             if (pkmnList.flat(1)[i][0] === mon[0].substring(0, mon[0].indexOf(DELIMITER)))
-                                return [`${j[0].substring(0, j[0].indexOf(DELIMITER))} (${j[0].substring(j[0].indexOf(DELIMITER) + 1)})`,
-                                        `${("000" + (i + 1)).slice(-4)}${j[0].substring(j[0].indexOf(DELIMITER)).toLowerCase()}`];
+                                return [`${cry[0].substring(0, cry[0].indexOf(DELIMITER))} (${
+                                                            cry.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
+                                                                                                cry[0].substring(cry[0].indexOf(DELIMITER) + 1))
+                                                        })`,
+                                        `${("000" + (i + 1)).slice(-4)}${cry[0].substring(cry[0].indexOf(DELIMITER)).toLowerCase()}`];
                             else
-                                return [j.every(v => typeof v === "string")
-                                        ? j[0].includes(DELIMITER)
-                                            ? j[0].substring(0, j[0].indexOf(DELIMITER))
-                                            : j[0]
+                                return [cry.every(v => typeof v === "string")
+                                        ? cry[0].includes(DELIMITER)
+                                            ? cry[0].substring(0, cry[0].indexOf(DELIMITER))
+                                            : cry[0]
                                         // this is designed to handle only Finizen atm, could break later
-                                        : j.map(v => typeof v === "string"
+                                        : cry.map(v => typeof v === "string"
                                                 ? v
                                                 : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "),
                                         `${("000" + (i + 1)).slice(-4)}`];
@@ -103,9 +106,10 @@
                             : x.map((v) => typeof v === "string"
                                     ? v
                                     : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "))
-                        : x[0].includes(POKEMON.flat(2)[i - 1])
-                        ? `${x[0].replace(DELIMITER, " (")})`
-                        : x[0].substring(0, x[0].indexOf(DELIMITER))))
+                        : list.includes(x[0].substring(0, x[0].indexOf(DELIMITER)))
+                            ? `${x[0].substring(0, x[0].indexOf(DELIMITER))} (${x.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
+                                                                                                        x[0].substring(x[0].indexOf(DELIMITER) + 1))})`
+                            : x[0].substring(0, x[0].indexOf(DELIMITER))))
                 .sort();
     }
 
@@ -139,7 +143,7 @@
                                     ? id
                                     : id.split(DELIMITER)[0] + x.substring(x.indexOf(DELIMITER)).toLowerCase()
                                 // this is designed to handle only Finizen atm, could break later
-                                : ("000" + x[0].slice(0, x[0].indexOf(DELIMITER))).slice(-4)
+                                : "modern/" + ("000" + x[0].slice(0, x[0].indexOf(DELIMITER))).slice(-4)
                                     + DELIMITER
                                     + x[0].split(DELIMITER).pop().toLowerCase());
         console.log(answer);
