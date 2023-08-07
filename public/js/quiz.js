@@ -50,20 +50,26 @@
     var answer, id, pics;
     var canSkip = true;
 
-    function findId(mon, pkmnList) {
+    function findId(mon, pkmnList, monEN, pkmnListEN) {
         // if the pokemon has multiple forms with the same cry
         if (Array.isArray(mon)) {
             for (let [i, monScan] of pkmnList.flat(1).entries())
                 if (Array.isArray(monScan))
-                    for (let cry of monScan)
+                    for (let [c, cry] of monScan.entries())
                         if (mon.every((form, formIdx) => form === cry[formIdx])) {
+                            console.log("poop!");
+                            console.log(mon);
+                            console.log(monEN);
+                            console.log(monScan);
+                            console.log(cry);
+                            console.log(pkmnListEN.flat(1)[i][c]);
                             // if there is no definitive first form (so far just Cramorant)
                             if (pkmnList.flat(1)[i][0] === mon[0].substring(0, mon[0].indexOf(DELIMITER)))
                                 return [`${cry[0].substring(0, cry[0].indexOf(DELIMITER))} (${
                                                             cry.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
                                                                                                 cry[0].substring(cry[0].indexOf(DELIMITER) + 1))
                                                         })`,
-                                        `${("000" + (i + 1)).slice(-4)}${cry[0].substring(cry[0].indexOf(DELIMITER)).toLowerCase()}`];
+                                        `${("000" + (i + 1)).slice(-4)}${monEN[0].substring(monEN[0].indexOf(DELIMITER)).toLowerCase()}`];
                             else
                                 return [cry.every(v => typeof v === "string")
                                         ? cry[0].includes(DELIMITER)
@@ -87,7 +93,7 @@
                                     ? mon
                                     : `${mon.substring(0, mon.indexOf(DELIMITER))} (${mon.substring(mon.indexOf(DELIMITER) + 1)})`,
                                 `${("000" + (i + 1)).slice(-4)}${mon.includes(DELIMITER)
-                                                                    ? mon.substring(mon.indexOf(DELIMITER)).toLowerCase()
+                                                                    ? monEN.substring(monEN.indexOf(DELIMITER)).toLowerCase()
                                                                     : ""}`];
         }
     }
@@ -133,8 +139,7 @@
         quizInput.val('');
         let mon = pkmnList.flat(2)[indices[i]];
         let monEN = pkmnListEN.flat(2)[indices[i]];
-        [answer, _] = findId(mon, pkmnList);
-        [_, id] = findId(monEN, pkmnListEN);
+        [answer, id] = findId(mon, pkmnList, monEN, pkmnListEN);
         id = isModern ? `modern/${id}` : `old/${id.slice(1)}`;
         pics = typeof monEN === "string"
                     ? [id]
