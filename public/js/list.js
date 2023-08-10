@@ -10,12 +10,21 @@
         return $(`
             <div class="cryButton gen${gen + 1}" id="${cryTag}">
                 ${pkmnNames.reduce((a, b, i) => a + `
-                    <img src="/public/images/modern/mini/${fileNames[i]}${extensions[i].replace("%", "%25")}.png" class="cryImg">
-                    ${b.indexOf(DELIMITER) === -1 ? b : b.replace(DELIMITER, " (").concat(")")}
+                    <div id="${b}">
+                        <img src="/public/images/modern/mini/${fileNames[i]}${extensions[i].replace("%", "%25")}.png" class="cryImg">
+                        <span>${b.indexOf(DELIMITER) === -1 ? b : b.replace(DELIMITER, " (").concat(")")}</span>
+                    </div>
                 `, "")}
             </div>
         `);
     }
+
+    // function getIdFromIndex(index) {
+    //     let pkmnData = index.split(DELIMITER);
+    //     return  `${SIMPLE_POKEMON.flat(1)[+pkmnData[0] - 1]}${pkmnData.length > 1
+    //                     ? `_${pkmnData[1].split(" ").map((x) => x[0].toUpperCase() + x.slice(1)).join(" ")}`
+    //                     : ""}`;
+    // }
 
     pkmnList.hide();
 
@@ -80,7 +89,10 @@
         $(element).hide();
         $(element).click(function(event) {
             event.preventDefault();
-            new Audio(`/public/cries/modern/${$(this).attr("id").replace("%", "%25")}.mp3`).play();
+            new Audio(`/public/cries/${$("#toggleRetroInput").is(":checked")
+                                            ? "modern/"
+                                            : "old"
+                                        }/${$(this).attr("id").replace("%", "%25")}.mp3`).play();
         });
     });
     pkmnList.show();
@@ -88,15 +100,22 @@
     genList.children().each(function (index, element) {
         $(element).click(function (event) {
             event.preventDefault();
-            $(`.gen${index + 1}`).each(function (i, e) {$(e).toggle();});
+            if ($("#toggleRetroInput").is(":checked")) // in modern mode
+                $(`.gen${index + 1}`).each(function (i, e) {$(e).toggle();});
+            else
+                $(`.gen${index + 1}`).each(function (i, e) {if ($(e).find("img").eq(0).hasClass("retro")) $(e).toggle()});
             $(element).toggleClass("unselectedGen");
         });
     });
 
+    // TODO: Update to function with retro button.
     $("#showAll").click(function (event) {
         event.preventDefault();
         for (let g = 1; g <= POKEMON.length; g++)
-            $(`.gen${g}`).each(function (i, e) {$(e).show()});
+            if ($("#toggleRetroInput").is(":checked")) // in modern mode
+                $(`.gen${g}`).each(function (i, e) {$(e).show()});
+            else
+                $(`.gen${g}`).each(function (i, e) {if (g <= 5 && $(e).find("img").eq(0).hasClass("retro")) $(e).show()});
         genList.children().removeClass("unselectedGen");
     });
 
@@ -127,20 +146,81 @@
             let pkmnFlat = POKEMON.flat(2);
             pkmnList.children().each(function (cryIndex, element) {
                 if (typeof pkmnFlat[cryIndex] === 'string')
-                    $(element).children()[0].nextSibling.nodeValue = pkmnFlat[cryIndex].includes(DELIMITER)
-                                                                        ? pkmnFlat[cryIndex].replace(DELIMITER, " (").concat(")")
-                                                                        : pkmnFlat[cryIndex];
+                    $(element).find("span").text(pkmnFlat[cryIndex].includes(DELIMITER)
+                                                    ? pkmnFlat[cryIndex].replace(DELIMITER, " (").concat(")")
+                                                    : pkmnFlat[cryIndex]);
                 else if ($(element).children().length === 1) // some pokemon may have two forms but one minisprite
-                    $(element).children()[0].nextSibling.nodeValue = pkmnFlat[cryIndex][0].split(DELIMITER)[0];
+                    $(element).find("span").text(pkmnFlat[cryIndex][0].split(DELIMITER)[0]);
                 else
-                    $(element).children().each(function (formIndex, e) {
-                        $(e)[0].nextSibling.nodeValue = typeof pkmnFlat[cryIndex][formIndex] === "string"
-                                                        ? pkmnFlat[cryIndex][formIndex].includes(DELIMITER)
-                                                            ? pkmnFlat[cryIndex][formIndex].replace(DELIMITER, " (").concat(")")
-                                                            : pkmnFlat[cryIndex][formIndex]
-                                                        : pkmnFlat[cryIndex][formIndex][0].split(DELIMITER).slice(-2).join(" (").concat(")");
+                    $(element).find("span").each(function (formIndex, e) {
+                        $(e).text(typeof pkmnFlat[cryIndex][formIndex] === "string"
+                                    ? pkmnFlat[cryIndex][formIndex].includes(DELIMITER)
+                                        ? pkmnFlat[cryIndex][formIndex].replace(DELIMITER, " (").concat(")")
+                                        : pkmnFlat[cryIndex][formIndex]
+                                    : pkmnFlat[cryIndex][formIndex][0].split(DELIMITER).slice(-2).join(" (").concat(")"));
                     });
             });
         });
+    });
+
+    $("#toggleRetroInput").click(function (event) {
+        if ($(this).is(":checked")) {
+            // entering modern mode
+
+            // show all gens after the first 5
+            $("#genList").children().slice(5).each(function() {$(this).show();});
+            $("#genList").children().slice(0, 5).each(function() {
+                $(this).css("background", $(this).css("background").replace(/\/old\//g, "/modern/0").replace(/gif/g, "png"));
+            });
+            for (let gen = 1; gen <= POKEMON_EN.length; gen++)
+                $(`.gen${gen}`).each(function (i, e) {
+                    let id = $(e).children().eq(0).attr("id");
+                    // show the button if it's from a modern selected gen or was hidden by retro mode
+                    if (!$(`#genList${gen}`).hasClass("unselectedGen") && 
+                            (gen > 5 || id.includes(DELIMITER) && !OLD_CRIES.includes(id)))
+                        return $(e).show();
+                    
+                    // change the cry back by adding a leading 0 from the button id
+                    $(e).attr("id", `0${$(e).attr("id")}`);
+                    // re-add all references to forms not referenced in OLD_FORMS
+                    $(e).children().each(function (ci, ce) {
+                        let cryId = $(ce).attr("id");
+                        if (cryId.includes(DELIMITER) && !OLD_CRIES.includes(DELIMITER) && !OLD_FORMS.includes(cryId))
+                            return $(ce).show();
+
+                        // change image to the modern version
+                        let img = $(ce).find("img");
+                        img.attr("src", img.attr("src").replace(/old\/mini\//g, "/modern/mini/0")).removeClass("retro");
+                    });
+                });
+        } else {
+            // entering retro mode
+
+            // hide all gens after the first 5
+            $("#genList").children().slice(5).each(function() {$(this).hide();});
+            $("#genList").children().slice(0, 5).each(function() {
+                $(this).css("background", $(this).css("background").replace(/\/modern\/0/g, "/old/").replace(/png/g, "gif"));
+            });
+            for (let gen = 1; gen <= POKEMON_EN.length; gen++)
+                $(`.gen${gen}`).each(function (i, e) {
+                    let id = $(e).children().eq(0).attr("id");
+                    // hide the button if it's not represented in OLD_CRIES
+                    if (gen > 5 || $(e).attr("id").includes(DELIMITER) && !OLD_CRIES.includes(id))
+                        return $(e).hide();
+
+                    // change the cry by removing a leading 0 from the button id
+                    $(e).attr("id", $(e).attr("id").slice(1));
+                    // remove all reference to forms not referenced in OLD_FORMS
+                    $(e).children().each(function (ci, ce) {
+                        let cryId = $(ce).attr("id");
+                        if (cryId.includes(DELIMITER) && !OLD_CRIES.includes(cryId) && !OLD_FORMS.includes(cryId))
+                            return $(ce).hide();
+
+                        // change the image to the retro version
+                        let img = $(ce).find("img");
+                        img.attr("src", img.attr("src").replace(/modern\/mini\/0/g, "old/mini/")).addClass("retro");
+                    });
+                });
+        }
     });
 })(window.jQuery);

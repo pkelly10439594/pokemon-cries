@@ -24,10 +24,18 @@
             <li id="genList8" class="genList unselectedGen">Generation 8</li>
             <li id="genList9" class="genList unselectedGen">Generation 9</li>
         </ul>
-        <ul id="genListExtras">
-            <li id="showAll" class="genList">Show all</li>
-            <li id="showNone" class="genList">Show none</li>
-        </ul>
+        <div id="belowGenSelector">
+            <div class="toggleWrapper">
+                <input type="checkbox" class="toggleInput" id="toggleRetroInput">
+                <label class="toggleSwitch" id="toggleRetroSwitch" for="toggleRetroInput">
+                    <span class="toggleSlider" id="toggleRetroSlider"></span>
+                </label>
+            </div>
+            <ul id="genListExtras">
+                <li id="showAll" class="genList">Show all</li>
+                <li id="showNone" class="genList">Show none</li>
+            </ul>
+        </div>
     </nav>
     <h1>{{title}}</h1>
     <main>

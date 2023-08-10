@@ -525,6 +525,41 @@ const OLD_FORMS = ["Castform_Sunny", "Castform_Rainy", "Castform_Snowy", "Deoxys
                 "Basculin_Blue", "Darmanitan_Standard", "Darmanitan_Zen", "Deerling_Spring", "Deerling_Summer",
                 "Deerling_Autumn", "Deerling_Winter", "Sawsbuck_Spring", "Sawsbuck_Summer", "Sawsbuck_Autumn",
                 "Sawsbuck_Winter", "Keldeo_Ordinary", "Keldeo_Resolute", "Meloetta_Aria", "Meloetta_Pirouette"];
+const OLD_POKEMON = POKEMON_EN.slice(0, 5).map(
+    gen => gen.map(
+        function (species) {
+            if (Array.isArray(species))
+                species = species.filter(cry => !cry.includes(DELIMITER) || OLD_CRIES.includes(cry));
+            species = typeof species === "string"
+                    ? species
+                    : typeof species[0] === "string"
+                        ? species
+                        : species.map(function(mon) {
+                            if (Array.isArray(mon))
+                                mon = mon.filter(form => !form.includes(DELIMITER) || OLD_FORMS.includes(form));
+                            return mon.length === 1 ? mon[0] : mon;
+                        });
+            return typeof species === "string"
+                    ? species
+                    : species.length === 1
+                        ? typeof species[0] === "string"
+                            ? species[0]
+                            : species[0].length === 1 ? species[0][0] : species
+                        : species;
+        }
+    )
+);
+
+
+const SIMPLE_POKEMON = POKEMON_EN.map(
+    gen => gen.map(
+        species => typeof species === "string"
+                ? species
+                : typeof species[0] === "string"
+                    ? species[0].split(DELIMITER)[0]
+                    : species[0][0].split(DELIMITER)[0]
+    )
+);
 
 
 // foreign languages

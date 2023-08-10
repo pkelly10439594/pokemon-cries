@@ -8,39 +8,6 @@
     var timeout; // timeout for correct guess
     var POKEMON = POKEMON_EN;
     var pkmn = POKEMON.flat(2).filter(x => x !== ""); // filter out pokédex gaps
-    const OLD_POKEMON = POKEMON.slice(0, 5).map(
-        gen => gen.map(
-            function (species) {
-                if (Array.isArray(species))
-                    species = species.filter(cry => !cry.includes(DELIMITER) || OLD_CRIES.includes(cry));
-                species = typeof species === "string"
-                        ? species
-                        : typeof species[0] === "string"
-                            ? species
-                            : species.map(function(mon) {
-                                if (Array.isArray(mon))
-                                   mon = mon.filter(form => !form.includes(DELIMITER) || OLD_FORMS.includes(form));
-                                return mon.length === 1 ? mon[0] : mon;
-                            });
-                return typeof species === "string"
-                        ? species
-                        : species.length === 1
-                            ? typeof species[0] === "string"
-                                ? species[0]
-                                : species[0].length === 1 ? species[0][0] : species
-                            : species;
-            }
-        )
-    );
-    const SIMPLE_POKEMON = POKEMON.map(
-        gen => gen.map(
-            species => typeof species === "string"
-                    ? species
-                    : typeof species[0] === "string"
-                        ? species[0].split(DELIMITER)[0]
-                        : species[0][0].split(DELIMITER)[0]
-        )
-    );
     var sizes = POKEMON.map(gen => gen.flat(1).filter(x => x !== "").length);
     var old_sizes = [151, 100, 135, 108, 161];
     var simple_sizes = POKEMON.map(gen => gen.length);
@@ -57,12 +24,6 @@
                 if (Array.isArray(monScan))
                     for (let [c, cry] of monScan.entries())
                         if (mon.every((form, formIdx) => form === cry[formIdx])) {
-                            console.log("poop!");
-                            console.log(mon);
-                            console.log(monEN);
-                            console.log(monScan);
-                            console.log(cry);
-                            console.log(pkmnListEN.flat(1)[i][c]);
                             // if there is no definitive first form (so far just Cramorant)
                             if (pkmnList.flat(1)[i][0] === mon[0].substring(0, mon[0].indexOf(DELIMITER)))
                                 return [`${cry[0].substring(0, cry[0].indexOf(DELIMITER))} (${
@@ -151,9 +112,9 @@
                                 : "modern/" + ("000" + x[0].slice(0, x[0].indexOf(DELIMITER))).slice(-4)
                                     + DELIMITER
                                     + x[0].split(DELIMITER).pop().toLowerCase());
-        console.log(answer);
-        console.log(id);
-        console.log(pics);
+        // console.log(answer);
+        // console.log(id);
+        // console.log(pics);
         quizAudio.attr("src", `/public/cries/${id.replace("%", "%25")}.mp3`);
         quizAudio.trigger("play");
         quizInput.select();
@@ -400,6 +361,7 @@
         getOneCry(cryIndex);
     });
 
+    // TODO: Implement. This slider is unfinished and may require a structural overhaul to complete.
     $("#toggleSimpleInput").click(function (event) {
         let cur_sizes = $(this).is(":checked") ? sizes : simple_sizes;
         indices = shuffle(genList.children().toArray().reduce(
@@ -420,5 +382,5 @@
         if (event.which < 48 || event.which > 90 || event.ctrlKey) return;
 
         quizInput.focus();
-    })
+    });
 })(window.jQuery);

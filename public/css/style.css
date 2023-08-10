@@ -17,6 +17,7 @@ h1, p {
     padding: 5px;
     margin: 15px;
     filter: drop-shadow(10px 10px 5px #000000); /*not skip??*/
+    display: flex;
 }
 
 .cryButton, .toggleSwitch, #genSelector, #langSelector, #skipButton {
@@ -173,6 +174,13 @@ h1, p {
 #answerImg {
     position: relative;
     height: 260px;
+}
+
+#belowGenSelector {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    justify-items: center;
+    align-items: center;
 }
 
 #containerContainer {
