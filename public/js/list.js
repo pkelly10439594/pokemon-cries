@@ -7,25 +7,31 @@
     var POKEMON = POKEMON_EN;
 
     function getPkmnCryHTML(pkmnNames, extensions, fileNames, cryTag, gen) {
+        let isModernAndHideBtn = $("#toggleRetroInput").is(":checked") || gen >= 5 || cryTag.includes(DELIMITER) && !OLD_CRIES.includes(pkmnNames[0]);
         return $(`
-            <div class="cryButton gen${gen + 1}" id="${cryTag}">
-                ${pkmnNames.reduce((a, b, i) => a + `
-                    <div id="${b}">
-                        <img src="/public/images/modern/mini/${fileNames[i]}${extensions[i].replace("%", "%25")}.png" class="cryImg">
-                        <span>${b.indexOf(DELIMITER) === -1 ? b : b.replace(DELIMITER, " (").concat(")")}</span>
-                    </div>
-                `, "")}
+            <div class="cryButton gen${gen + 1}" id="${cryTag.slice(isModernAndHideBtn ? 0 : 1)}">
+                ${pkmnNames.reduce(function (a, b, i) {
+                    let dontUseOldImg = $("#toggleRetroInput").is(":checked") || gen >= 5 || b.includes(DELIMITER) && !OLD_CRIES.includes(b) && !OLD_FORMS.includes(b);
+                    return a + `
+                        <div id="${b}" style="${$("#toggleRetroInput").is(":checked") || gen >= 5 || !b.includes(DELIMITER) || OLD_CRIES.includes(b) || OLD_FORMS.includes(b) || isModernAndHideBtn
+                                                    ? ""
+                                                    : "display: none;"}">
+                            <img src="/public/images/${dontUseOldImg ? "modern" : "old"}/mini/${fileNames[i].slice(dontUseOldImg ? 0 : 1)}${extensions[i].replace("%", "%25")}.png"
+                                        class="cryImg${isModernAndHideBtn ? "" : " retro"}">
+                            <span>${b.indexOf(DELIMITER) === -1 ? b : b.replace(DELIMITER, " (").concat(")")}</span>
+                        </div>
+                    `}, "")}
             </div>
         `);
     }
-
-    // function getIdFromIndex(index) {
-    //     let pkmnData = index.split(DELIMITER);
-    //     return  `${SIMPLE_POKEMON.flat(1)[+pkmnData[0] - 1]}${pkmnData.length > 1
-    //                     ? `_${pkmnData[1].split(" ").map((x) => x[0].toUpperCase() + x.slice(1)).join(" ")}`
-    //                     : ""}`;
-    // }
-
+    
+    // hide modern gens from the gen selector if starting on retro mode
+    if (!$("#toggleRetroInput").is(":checked")) {
+        $("#genList").children().slice(5).each(function() {$(this).hide();});
+        $("#genList").children().slice(0, 5).each(function() {
+            $(this).css("background", $(this).css("background").replace(/\/modern\/0/g, "/old/").replace(/png/g, "gif"));
+        });
+    }
     pkmnList.hide();
 
     for (let [generation, pkmnSubList] of POKEMON.entries()) {
@@ -103,19 +109,24 @@
             if ($("#toggleRetroInput").is(":checked")) // in modern mode
                 $(`.gen${index + 1}`).each(function (i, e) {$(e).toggle();});
             else
-                $(`.gen${index + 1}`).each(function (i, e) {if ($(e).find("img").eq(0).hasClass("retro")) $(e).toggle()});
+                $(`.gen${index + 1}`).each(function (i, e) {
+                    if (!$(e).attr("id").includes(DELIMITER) || OLD_CRIES.includes($(e).children().eq(0).attr("id")))
+                        $(e).toggle();
+                });
             $(element).toggleClass("unselectedGen");
         });
     });
 
-    // TODO: Update to function with retro button.
     $("#showAll").click(function (event) {
         event.preventDefault();
         for (let g = 1; g <= POKEMON.length; g++)
             if ($("#toggleRetroInput").is(":checked")) // in modern mode
-                $(`.gen${g}`).each(function (i, e) {$(e).show()});
+                $(`.gen${g}`).each(function (i, e) {$(e).show();});
             else
-                $(`.gen${g}`).each(function (i, e) {if (g <= 5 && $(e).find("img").eq(0).hasClass("retro")) $(e).show()});
+                $(`.gen${g}`).each(function (i, e) {
+                    if (g <= 5 && (!$(e).attr("id").includes(DELIMITER) || OLD_CRIES.includes($(e).children().eq(0).attr("id"))))
+                        $(e).show();
+                });
         genList.children().removeClass("unselectedGen");
     });
 
@@ -174,23 +185,24 @@
             });
             for (let gen = 1; gen <= POKEMON_EN.length; gen++)
                 $(`.gen${gen}`).each(function (i, e) {
-                    let id = $(e).children().eq(0).attr("id");
                     // show the button if it's from a modern selected gen or was hidden by retro mode
                     if (!$(`#genList${gen}`).hasClass("unselectedGen") && 
-                            (gen > 5 || id.includes(DELIMITER) && !OLD_CRIES.includes(id)))
+                            (gen > 5 || $(e).attr("id").includes(DELIMITER) && !OLD_CRIES.includes($(e).children().eq(0).attr("id"))))
                         return $(e).show();
+                    // at this point, if the cryButton has no retro images, there is nothing more to do
+                    if ($(e).find(".retro").length === 0) return;
                     
                     // change the cry back by adding a leading 0 from the button id
                     $(e).attr("id", `0${$(e).attr("id")}`);
                     // re-add all references to forms not referenced in OLD_FORMS
                     $(e).children().each(function (ci, ce) {
                         let cryId = $(ce).attr("id");
-                        if (cryId.includes(DELIMITER) && !OLD_CRIES.includes(DELIMITER) && !OLD_FORMS.includes(cryId))
+                        if (cryId.includes(DELIMITER) && !OLD_CRIES.includes(cryId) && !OLD_FORMS.includes(cryId))
                             return $(ce).show();
 
                         // change image to the modern version
                         let img = $(ce).find("img");
-                        img.attr("src", img.attr("src").replace(/old\/mini\//g, "/modern/mini/0")).removeClass("retro");
+                        img.attr("src", img.attr("src").replace(/old\/mini\//g, "modern/mini/0")).removeClass("retro");
                     });
                 });
         } else {
@@ -203,9 +215,8 @@
             });
             for (let gen = 1; gen <= POKEMON_EN.length; gen++)
                 $(`.gen${gen}`).each(function (i, e) {
-                    let id = $(e).children().eq(0).attr("id");
                     // hide the button if it's not represented in OLD_CRIES
-                    if (gen > 5 || $(e).attr("id").includes(DELIMITER) && !OLD_CRIES.includes(id))
+                    if (gen > 5 || $(e).attr("id").includes(DELIMITER) && !OLD_CRIES.includes($(e).children().eq(0).attr("id")))
                         return $(e).hide();
 
                     // change the cry by removing a leading 0 from the button id
