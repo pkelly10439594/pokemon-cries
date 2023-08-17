@@ -93,7 +93,7 @@
 
     pkmnList.children().each(function (index, element) {
         $(element).hide();
-        $(element).click(function(event) {
+        $(element).on("click", function(event) {
             event.preventDefault();
             new Audio(`/public/cries/${$("#toggleRetroInput").is(":checked")
                                             ? "modern/"
@@ -104,7 +104,7 @@
     pkmnList.show();
 
     genList.children().each(function (index, element) {
-        $(element).click(function (event) {
+        $(element).on("click", function (event) {
             event.preventDefault();
             if ($("#toggleRetroInput").is(":checked")) // in modern mode
                 $(`.gen${index + 1}`).each(function (i, e) {$(e).toggle();});
@@ -117,7 +117,7 @@
         });
     });
 
-    $("#showAll").click(function (event) {
+    $("#showAll").on("click", function (event) {
         event.preventDefault();
         for (let g = 1; g <= POKEMON.length; g++)
             if ($("#toggleRetroInput").is(":checked")) // in modern mode
@@ -130,7 +130,7 @@
         genList.children().removeClass("unselectedGen");
     });
 
-    $("#showNone").click(function (event) {
+    $("#showNone").on("click", function (event) {
         event.preventDefault();
         for (let g = 1; g <= POKEMON.length; g++)
             $(`.gen${g}`).each(function (i, e) {$(e).hide()});
@@ -138,7 +138,7 @@
     });
 
     $("#langList").children().each(function (langIdx, langBtn) {
-        $(langBtn).click(function (event) {
+        $(langBtn).on("click", function (event) {
             event.preventDefault();
             switch ($(langBtn).attr("id")) {
                 case "langJP": POKEMON = POKEMON_JP; break;
@@ -174,7 +174,7 @@
         });
     });
 
-    $("#toggleRetroInput").click(function (event) {
+    $("#toggleRetroInput").on("click", function (event) {
         if ($(this).is(":checked")) {
             // entering modern mode
 

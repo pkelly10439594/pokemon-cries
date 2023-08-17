@@ -77,7 +77,7 @@
                             ? `${x[0].substring(0, x[0].indexOf(DELIMITER))} (${x.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
                                                                                                         x[0].substring(x[0].indexOf(DELIMITER) + 1))})`
                             : x[0].substring(0, x[0].indexOf(DELIMITER))))
-                .sort();
+                .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
     }
 
     // shuffle the indices (Fisher-Yates algorithm)
@@ -112,9 +112,6 @@
                                 : "modern/" + ("000" + x[0].slice(0, x[0].indexOf(DELIMITER))).slice(-4)
                                     + DELIMITER
                                     + x[0].split(DELIMITER).pop().toLowerCase());
-        // console.log(answer);
-        // console.log(id);
-        // console.log(pics);
         quizAudio.attr("src", `/public/cries/${id.replace("%", "%25")}.mp3`);
         quizAudio.trigger("play");
         quizInput.select();
@@ -158,27 +155,25 @@
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
     }
 
-    function populateDropdown() {
-        searchResults.empty();
-        for (let x of answers) searchResults.append(`<li class="listItem">${x}</li>`);
-        $(".listItem").each(function () {
-            $(this).mouseover(function (event) {
-                $("#selectedItem").removeAttr('id');
-                $(this).attr('id', "selectedItem");
-                $("#selectedItem").click(function (event) {
-                    quizInput.val($(this).text());
-                    quizInput.focus();
-                });
+    answers = getAnswers(pkmn);
+    let old_answers = getAnswers(OLD_POKEMON.flat(2));
+    for (let x of answers) searchResults.append(`<li class="listItem${old_answers.includes(x) ? "" : " retroItem"}">${x}</li>`);
+    $(".listItem").each(function () {
+        $(this).on("mouseover", function (event) {
+            $("#selectedItem").removeAttr('id');
+            $(this).attr('id', "selectedItem").on("click", function (event) {
+                quizInput.val($(this).text());
+                quizInput.focus();
             });
         });
-    }
-
+    });
+    
     if ($("#toggleRetroInput").is(":checked")) {
         indices = [...pkmn.keys()];
-        answers = getAnswers(pkmn);
     } else {
         indices = [...OLD_POKEMON.flat(2).keys()];
-        answers = getAnswers(OLD_POKEMON.flat(2));
+        // TODO: remove items from `answers` if they are suppressed from retro mode (LOW PRIO)
+        $(".retroItem").addClass("suppressedRetro");
         $("#genList").children().slice(5).each(function() {$(this).hide();});
         $("#genList").children().slice(0, 5).each(function() {
             $(this).css("background", $(this).css("background").replace(/\/modern\/0/g, "/old/").replace(/png/g, "gif"));
@@ -186,7 +181,6 @@
     }
     shuffle(indices);
     getOneCry(cryIndex);
-    populateDropdown();
     resetStats();
 
     quizInput.focus(function() {
@@ -200,8 +194,12 @@
 
     quizInput.on("propertychange input", function (event) {
         searchResults.children().each(function() {
-            if ($(this).text().toLowerCase().includes(quizInput.val().toLowerCase())) $(this).show();
-            else $(this).hide();
+            // str.normalize("NFD").replace(/\p{Diacritic}/gu, "") removes accents from string str
+            if ($(this).text().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").includes(
+                        quizInput.val().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "")))
+                $(this).show();
+            else
+                $(this).hide();
         });
     });
 
@@ -254,7 +252,7 @@
     });
 
     genList.children().each(function (index, element) {
-        $(element).click(function (event) {
+        $(element).on("click", function (event) {
             event.preventDefault();
             $(element).toggleClass("unselectedGen");
             let s = $("#toggleRetroInput").is(":checked") ? sizes : old_sizes;
@@ -268,7 +266,7 @@
         });
     });
 
-    $("#showAll").click(function (event) {
+    $("#showAll").on("click", function (event) {
         event.preventDefault();
         genList.children().removeClass("unselectedGen");
         indices = shuffle([...($("#toggleRetroInput").is(":checked") ? pkmn : OLD_POKEMON.flat(2)).keys()]);
@@ -277,7 +275,7 @@
         getOneCry(cryIndex);
     });
 
-    $("#showNone").click(function (event) {
+    $("#showNone").on("click", function (event) {
         event.preventDefault();
         genList.children().addClass("unselectedGen");
         indices = [];
@@ -285,7 +283,7 @@
         clearTimeout(timeout);
     });
 
-    $("#skipButton").click(function (event) {
+    $("#skipButton").on("click", function (event) {
         if (!canSkip) return;
         event.preventDefault();
 
@@ -298,8 +296,10 @@
     });
 
     $("#langList").children().each(function (langIdx, langBtn) {
-        $(langBtn).click(function (event) {
+        $(langBtn).on("click", function (event) {
             event.preventDefault();
+            // save the language before changing it to make sorting easier later
+            let formerLang = POKEMON.flat(2);
             switch ($(langBtn).attr("id")) {
                 case "langEN": POKEMON = POKEMON_EN; break;
                 case "langJP": POKEMON = POKEMON_JP; break;
@@ -310,20 +310,26 @@
                 case "langKR": POKEMON = POKEMON_KR; break;
                 case "langZH_T": POKEMON = POKEMON_ZH_T; break;
                 case "langZH_S": POKEMON = POKEMON_ZH_S; break;
-                default:
-                    "YIKES!!";
-                    break;
+                default: throw new Error("Unexpected language selection.");
             }
 
             pkmn = POKEMON.flat(2).filter(x => x !== "");
-            answers = getAnswers(pkmn);
-            populateDropdown();
+            // translate the new set of answers
+            answers = getAnswers(pkmn.toSorted((a, b) => formerLang[pkmn.indexOf(a)].toString().localeCompare(formerLang[pkmn.indexOf(b)])));
+            // perform a text replacement on all search results
+            searchResults.children().each((i, e) => $(e).text(answers[i]));
+            // sort the final searchResults by innerHTML
+            // TODO: BUG: sorting it doesnt move the retro class labels :(
+            searchResults.children().sort((a, b) => $(a).text().localeCompare($(b).text()));
+            searchResults.children().detach().appendTo(searchResults);
+            console.log(searchResults.children());
+            answers.sort();
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
     });
 
-    $("#toggleRetroInput").click(function (event) {
+    $("#toggleRetroInput").on("click", function (event) {
         if ($(this).is(":checked")) {
             // entering modern mode
 
@@ -338,7 +344,6 @@
                                                 start + sizes[i]]
                                             : [idxs, start + sizes[i]],
                 [[], 0])[0]);
-            answers = getAnswers(pkmn);
         } else {
             // entering retro mode
 
@@ -353,16 +358,19 @@
                                                 start + old_sizes[i]]
                                             : [idxs, start + old_sizes[i]],
                 [[], 0])[0]);
-            answers = getAnswers(OLD_POKEMON.flat(2));
         }
-        populateDropdown();
+        $(".retroItem").toggleClass("suppressedRetro");
         resetStats();
         clearTimeout(timeout);
+        // TODO: this doesnt translate the actual correct answer properly if in retro mode
+        // IDEA: what if we never sort the answers variable and we instead permute it to match the indices
+        //       THIS WONT WORK BECAUSE answers HAS TO MATCH THE DROPDOWN IN ORDER TO TRANSLATE
+        //       maybe if after doing that we simply repermute to match the indices
         getOneCry(cryIndex);
     });
 
     // TODO: Implement. This slider is unfinished and may require a structural overhaul to complete.
-    $("#toggleSimpleInput").click(function (event) {
+    $("#toggleSimpleInput").on("click", function (event) {
         let cur_sizes = $(this).is(":checked") ? sizes : simple_sizes;
         indices = shuffle(genList.children().toArray().reduce(
             ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen") && $(child).is(":visible")
@@ -370,7 +378,6 @@
                                             start + cur_sizes[i]]
                                         : [idxs, start + cur_sizes[i]],
             [[], 0])[0]);
-        populateDropdown();
         resetStats();
         clearTimeout(timeout);
         getOneCry(cryIndex);

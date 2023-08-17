@@ -124,6 +124,10 @@ h1, p {
     height: 84px;
 }
 
+.suppressedRetro, .suppressedSimple {
+    display: none !important;
+}
+
 .toggleInput {
     display: none;
 }
