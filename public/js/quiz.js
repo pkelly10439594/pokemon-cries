@@ -13,11 +13,11 @@
     var simple_sizes = POKEMON.map(gen => gen.length);
     var indices;
     var cryIndex = currStreak = longestStreak = skipsUsed = 0;
-    var answers;
+    var answers, allAnswers;
     var answer, id, pics;
     var canSkip = true;
 
-    function findId(mon, pkmnList, monEN, pkmnListEN) {
+    function findId(mon, pkmnList) {
         // if the pokemon has multiple forms with the same cry
         if (Array.isArray(mon)) {
             for (let [i, monScan] of pkmnList.flat(1).entries())
@@ -30,7 +30,7 @@
                                                             cry.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
                                                                                                 cry[0].substring(cry[0].indexOf(DELIMITER) + 1))
                                                         })`,
-                                        `${("000" + (i + 1)).slice(-4)}${monEN[0].substring(monEN[0].indexOf(DELIMITER)).toLowerCase()}`];
+                                        `${("000" + (i + 1)).slice(-4)}${mon[0].substring(mon[0].indexOf(DELIMITER)).toLowerCase()}`];
                             else
                                 return [cry.every(v => typeof v === "string")
                                         ? cry[0].includes(DELIMITER)
@@ -54,30 +54,31 @@
                                     ? mon
                                     : `${mon.substring(0, mon.indexOf(DELIMITER))} (${mon.substring(mon.indexOf(DELIMITER) + 1)})`,
                                 `${("000" + (i + 1)).slice(-4)}${mon.includes(DELIMITER)
-                                                                    ? monEN.substring(monEN.indexOf(DELIMITER)).toLowerCase()
+                                                                    ? mon.substring(mon.indexOf(DELIMITER)).toLowerCase()
                                                                     : ""}`];
         }
     }
 
-    function getAnswers(list) {
-        return list.map(
-            (x, i) => typeof x === "string"
-                    ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
-                    : (!x[0].includes(DELIMITER)
-                        ? (x.every((v) => typeof v === "string")
-                            ? x[0]
-                            // this is designed to handle only Finizen atm, could break later
-                            // (["Finizen", ["964_Palafin_Zero", "..."]] or ["Finizen", ["964_Palafin_Zero"], ["..."]])???
-                            // currently handles the second but maybe first is more robust
-                            // will leave it until i have reason to fix
-                            : x.map((v) => typeof v === "string"
-                                    ? v
-                                    : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "))
-                        : list.includes(x[0].substring(0, x[0].indexOf(DELIMITER)))
-                            ? `${x[0].substring(0, x[0].indexOf(DELIMITER))} (${x.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
-                                                                                                        x[0].substring(x[0].indexOf(DELIMITER) + 1))})`
-                            : x[0].substring(0, x[0].indexOf(DELIMITER))))
-                .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    function getAnswers(list, doNotSort) {
+        let answers = list.map(
+                        (x, i) => typeof x === "string"
+                                ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
+                                : (!x[0].includes(DELIMITER)
+                                    ? (x.every((v) => typeof v === "string")
+                                        ? x[0]
+                                        // this is designed to handle only Finizen atm, could break later
+                                        // (["Finizen", ["964_Palafin_Zero", "..."]] or ["Finizen", ["964_Palafin_Zero"], ["..."]])???
+                                        // currently handles the second but maybe first is more robust
+                                        // will leave it until i have reason to fix
+                                        : x.map((v) => typeof v === "string"
+                                                ? v
+                                                : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "))
+                                    : list.includes(x[0].substring(0, x[0].indexOf(DELIMITER)))
+                                        ? `${x[0].substring(0, x[0].indexOf(DELIMITER))} (${x.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
+                                                                                                                    x[0].substring(x[0].indexOf(DELIMITER) + 1))})`
+                                        : x[0].substring(0, x[0].indexOf(DELIMITER))))
+        if (doNotSort) return answers;
+        return answers.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
     }
 
     // shuffle the indices (Fisher-Yates algorithm)
@@ -91,16 +92,15 @@
 
     function getOneCry(i) {
         let isModern = $("#toggleRetroInput").is(":checked");
-        let pkmnList = isModern ? POKEMON : OLD_POKEMON;
         let pkmnListEN = isModern ? POKEMON_EN : OLD_POKEMON;
         canSkip = true;
         if (i >= indices.length) return; // maybe put a victory screen here idk
         quizInput.attr("readonly", false);
         answerImg.empty();
         quizInput.val('');
-        let mon = pkmnList.flat(2)[indices[i]];
         let monEN = pkmnListEN.flat(2)[indices[i]];
-        [answer, id] = findId(mon, pkmnList, monEN, pkmnListEN);
+        [answer, id] = findId(monEN, pkmnListEN);
+        answer = allAnswers.find((mon) => mon.nameEN === answer).name;
         id = isModern ? `modern/${id}` : `old/${id.slice(1)}`;
         pics = typeof monEN === "string"
                     ? [id]
@@ -155,9 +155,15 @@
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
     }
 
-    answers = getAnswers(pkmn);
+    answers = getAnswers(pkmn, true);
     let old_answers = getAnswers(OLD_POKEMON.flat(2));
-    for (let x of answers) searchResults.append(`<li class="listItem${old_answers.includes(x) ? "" : " retroItem"}">${x}</li>`);
+    allAnswers = answers.map((mon, idx) => ({name: mon,
+                                        nameEN: mon,
+                                        cryIdx: idx,
+                                        retro: old_answers.includes(mon)
+                    })).sort((a, b) => a.name.localeCompare(b.name));
+    for (let x of allAnswers) searchResults.append(`<li class="listItem${old_answers.includes(x.name) ? "" : " retroItem"}">${x.name}</li>`);
+    answers = allAnswers.filter((mon) => mon.retro || $("#toggleRetroInput").is(":checked")).map((mon) => mon.name);
     $(".listItem").each(function () {
         $(this).on("mouseover", function (event) {
             $("#selectedItem").removeAttr('id');
@@ -172,7 +178,6 @@
         indices = [...pkmn.keys()];
     } else {
         indices = [...OLD_POKEMON.flat(2).keys()];
-        // TODO: remove items from `answers` if they are suppressed from retro mode (LOW PRIO)
         $(".retroItem").addClass("suppressedRetro");
         $("#genList").children().slice(5).each(function() {$(this).hide();});
         $("#genList").children().slice(0, 5).each(function() {
@@ -314,16 +319,23 @@
             }
 
             pkmn = POKEMON.flat(2).filter(x => x !== "");
+
             // translate the new set of answers
-            answers = getAnswers(pkmn.toSorted((a, b) => formerLang[pkmn.indexOf(a)].toString().localeCompare(formerLang[pkmn.indexOf(b)])));
+            let mapToFirstFormInNewLang = function (formerLang, newLang, a) {
+                let thingy = formerLang[newLang.map((x) => Array.isArray(x) ? x[0] : x).indexOf(Array.isArray(a) ? a[0] : a)];
+                return Array.isArray(thingy) ? thingy[0] : thingy;
+            };
+            answers = getAnswers(pkmn.toSorted((a, b) => mapToFirstFormInNewLang(formerLang, pkmn, a).localeCompare(mapToFirstFormInNewLang(formerLang, pkmn, b))), true);
+            // answers = getAnswers(pkmn.toSorted((a, b) => new Intl.Collator().compare(mapToFirstFormInNewLang(formerLang, pkmn, a),
+            //                                                                         mapToFirstFormInNewLang(formerLang, pkmn, b))), true);
+
+            allAnswers.forEach((mon, idx) => mon.name = answers[idx]);
+            allAnswers.sort((a, b) => a.name.localeCompare(b.name));
             // perform a text replacement on all search results
             searchResults.children().each((i, e) => $(e).text(answers[i]));
             // sort the final searchResults by innerHTML
-            // TODO: BUG: sorting it doesnt move the retro class labels :(
-            searchResults.children().sort((a, b) => $(a).text().localeCompare($(b).text()));
-            searchResults.children().detach().appendTo(searchResults);
-            console.log(searchResults.children());
-            answers.sort();
+            searchResults.children().sort((a, b) => $(a).text().localeCompare($(b).text())).detach().appendTo(searchResults);
+            answers.sort((a, b) => a.localeCompare(b));
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
@@ -359,17 +371,15 @@
                                             : [idxs, start + old_sizes[i]],
                 [[], 0])[0]);
         }
+        answers = allAnswers.filter((mon) => mon.retro || $("#toggleRetroInput").is(":checked")).map((mon) => mon.name);
         $(".retroItem").toggleClass("suppressedRetro");
         resetStats();
         clearTimeout(timeout);
-        // TODO: this doesnt translate the actual correct answer properly if in retro mode
-        // IDEA: what if we never sort the answers variable and we instead permute it to match the indices
-        //       THIS WONT WORK BECAUSE answers HAS TO MATCH THE DROPDOWN IN ORDER TO TRANSLATE
-        //       maybe if after doing that we simply repermute to match the indices
         getOneCry(cryIndex);
     });
 
     // TODO: Implement. This slider is unfinished and may require a structural overhaul to complete.
+    // NOTE: This structural overhaul may be complete (or mostly complete).
     $("#toggleSimpleInput").on("click", function (event) {
         let cur_sizes = $(this).is(":checked") ? sizes : simple_sizes;
         indices = shuffle(genList.children().toArray().reduce(
