@@ -154,11 +154,18 @@
                 default: POKEMON = POKEMON_EN; break;
             }
 
+            let openParen = " (", closeParen = ")";
+            if (["langJP", "langZH_T", "langZH_S"].includes($(langBtn).attr("id"))) {
+                openParen = "（"; closeParen = "）";
+            } else if (["langKR"].includes($(langBtn).attr("id"))) {
+                openParen = "(";
+            }
+
             let pkmnFlat = POKEMON.flat(2);
             pkmnList.children().each(function (cryIndex, element) {
                 if (typeof pkmnFlat[cryIndex] === 'string')
                     $(element).find("span").text(pkmnFlat[cryIndex].includes(DELIMITER)
-                                                    ? pkmnFlat[cryIndex].replace(DELIMITER, " (").concat(")")
+                                                    ? pkmnFlat[cryIndex].replace(DELIMITER, openParen).concat(closeParen)
                                                     : pkmnFlat[cryIndex]);
                 else if ($(element).children().length === 1) // some pokemon may have two forms but one minisprite
                     $(element).find("span").text(pkmnFlat[cryIndex][0].split(DELIMITER)[0]);
@@ -166,9 +173,9 @@
                     $(element).find("span").each(function (formIndex, e) {
                         $(e).text(typeof pkmnFlat[cryIndex][formIndex] === "string"
                                     ? pkmnFlat[cryIndex][formIndex].includes(DELIMITER)
-                                        ? pkmnFlat[cryIndex][formIndex].replace(DELIMITER, " (").concat(")")
+                                        ? pkmnFlat[cryIndex][formIndex].replace(DELIMITER, openParen).concat(closeParen)
                                         : pkmnFlat[cryIndex][formIndex]
-                                    : pkmnFlat[cryIndex][formIndex][0].split(DELIMITER).slice(-2).join(" (").concat(")"));
+                                    : pkmnFlat[cryIndex][formIndex][0].split(DELIMITER).slice(-2).join(openParen).concat(closeParen));
                     });
             });
         });

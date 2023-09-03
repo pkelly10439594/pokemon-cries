@@ -59,26 +59,32 @@
         }
     }
 
-    function getAnswers(list, doNotSort) {
-        let answers = list.map(
-                        (x, i) => typeof x === "string"
-                                ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, " (")})`)
-                                : (!x[0].includes(DELIMITER)
-                                    ? (x.every((v) => typeof v === "string")
-                                        ? x[0]
-                                        // this is designed to handle only Finizen atm, could break later
-                                        // (["Finizen", ["964_Palafin_Zero", "..."]] or ["Finizen", ["964_Palafin_Zero"], ["..."]])???
-                                        // currently handles the second but maybe first is more robust
-                                        // will leave it until i have reason to fix
-                                        : x.map((v) => typeof v === "string"
-                                                ? v
-                                                : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "))
-                                    : list.includes(x[0].substring(0, x[0].indexOf(DELIMITER)))
-                                        ? `${x[0].substring(0, x[0].indexOf(DELIMITER))} (${x.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
-                                                                                                                    x[0].substring(x[0].indexOf(DELIMITER) + 1))})`
-                                        : x[0].substring(0, x[0].indexOf(DELIMITER))))
-        if (doNotSort) return answers;
-        return answers.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    function getAnswers(list, language) {
+        let openParen = " (", closeParen = ")", slash = " / ";
+        if (["langJP", "langZH_T", "langZH_S"].includes(language)) {
+            openParen = "（"; closeParen = "）";
+        } else if (["langKR"].includes(language)) {
+            openParen = "(";
+        } if (["langJP", "langKR"].includes(language)) slash = "・";
+        else if (["langZH_T", "langZH_S"].includes(language)) slash = "／";
+
+        return list.map(
+                (x, i) => typeof x === "string"
+                        ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, openParen)}${closeParen}`)
+                        : (!x[0].includes(DELIMITER)
+                            ? (x.every((v) => typeof v === "string")
+                                ? x[0]
+                                // this is designed to handle only Finizen atm, could break later
+                                // (["Finizen", ["964_Palafin_Zero", "..."]] or ["Finizen", ["964_Palafin_Zero"], ["..."]])???
+                                // currently handles the second but maybe first is more robust
+                                // will leave it until i have reason to fix
+                                : x.map((v) => typeof v === "string"
+                                        ? v
+                                        : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, openParen)}${closeParen}`).join(slash))
+                            : list.includes(x[0].substring(0, x[0].indexOf(DELIMITER)))
+                                ? `${x[0].substring(0, x[0].indexOf(DELIMITER))}${openParen}${x.slice(1).reduce((str, cur) => `${str}${slash}${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
+                                                                                                            x[0].substring(x[0].indexOf(DELIMITER) + 1))}${closeParen}`
+                                : x[0].substring(0, x[0].indexOf(DELIMITER))))
     }
 
     // shuffle the indices (Fisher-Yates algorithm)
@@ -155,7 +161,7 @@
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
     }
 
-    answers = getAnswers(pkmn, true);
+    answers = getAnswers(pkmn);
     let old_answers = getAnswers(OLD_POKEMON.flat(2));
     allAnswers = answers.map((mon, idx) => ({name: mon,
                                         nameEN: mon,
@@ -325,17 +331,18 @@
                 let thingy = formerLang[newLang.map((x) => Array.isArray(x) ? x[0] : x).indexOf(Array.isArray(a) ? a[0] : a)];
                 return Array.isArray(thingy) ? thingy[0] : thingy;
             };
-            answers = getAnswers(pkmn.toSorted((a, b) => mapToFirstFormInNewLang(formerLang, pkmn, a).localeCompare(mapToFirstFormInNewLang(formerLang, pkmn, b))), true);
-            // answers = getAnswers(pkmn.toSorted((a, b) => new Intl.Collator().compare(mapToFirstFormInNewLang(formerLang, pkmn, a),
-            //                                                                         mapToFirstFormInNewLang(formerLang, pkmn, b))), true);
+            answers = getAnswers(pkmn.toSorted((a, b) => mapToFirstFormInNewLang(formerLang, pkmn, a).localeCompare(
+                                                        mapToFirstFormInNewLang(formerLang, pkmn, b)))
+                                , $(langBtn).attr("id"));
 
             allAnswers.forEach((mon, idx) => mon.name = answers[idx]);
             allAnswers.sort((a, b) => a.name.localeCompare(b.name));
-            // perform a text replacement on all search results
-            searchResults.children().each((i, e) => $(e).text(answers[i]));
-            // sort the final searchResults by innerHTML
-            searchResults.children().sort((a, b) => $(a).text().localeCompare($(b).text())).detach().appendTo(searchResults);
-            answers.sort((a, b) => a.localeCompare(b));
+            // perform a text replacement on all search results and sort
+            searchResults.children().each((i, e) => $(e).text(answers[i]))
+                                    .sort((a, b) => $(a).text().localeCompare($(b).text()))
+                                    .detach().appendTo(searchResults);
+
+            answers.forEach((mon, idx) => answers[idx] = allAnswers[idx].name);
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
