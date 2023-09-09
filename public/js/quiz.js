@@ -8,7 +8,7 @@
     var timeout; // timeout for correct guess
     var POKEMON = POKEMON_EN;
     var pkmn = POKEMON.flat(2).filter(x => x !== ""); // filter out pokédex gaps
-    var sizes = POKEMON.map(gen => gen.flat(1).filter(x => x !== "").length);
+    var sizes = POKEMON.map(gen => gen.flat(1).filter(x => x !== "" && !x.includes(SKIPCHAR)).length);
     var old_sizes = [151, 100, 135, 108, 161];
     var simple_sizes = POKEMON.map(gen => gen.length);
     var indices;
@@ -20,12 +20,12 @@
     function findId(mon, pkmnList) {
         // if the pokemon has multiple forms with the same cry
         if (Array.isArray(mon)) {
-            for (let [i, monScan] of pkmnList.flat(1).entries())
+            for (let [i, monScan] of pkmnList.entries())
                 if (Array.isArray(monScan))
                     for (let [c, cry] of monScan.entries())
                         if (mon.every((form, formIdx) => form === cry[formIdx])) {
-                            // if there is no definitive first form (so far just Cramorant)
-                            if (pkmnList.flat(1)[i][0] === mon[0].substring(0, mon[0].indexOf(DELIMITER)))
+                            // if there is no definitive first form for this cry (so far just Cramorant)
+                            if (pkmnList[i][0] === mon[0].substring(0, mon[0].indexOf(DELIMITER)))
                                 return [`${cry[0].substring(0, cry[0].indexOf(DELIMITER))} (${
                                                             cry.slice(1).reduce((str, cur) => `${str} / ${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
                                                                                                 cry[0].substring(cry[0].indexOf(DELIMITER) + 1))
@@ -44,9 +44,9 @@
                         }
         }
         // if the pokemon cry is a unique form of a pokemon
-        for (let [i, cry] of pkmnList.flat(1).entries()) {
+        for (let [i, cry] of pkmnList.entries()) {
             if (cry === mon)
-                return [mon, `${("000" + (i + 1)).slice(-4)}`];
+                return [mon, `${("000" + (i + 1)).slice(-4)}`]
             else
                 for (let j of cry)
                     if (j === mon)
@@ -98,15 +98,21 @@
 
     function getOneCry(i) {
         let isModern = $("#toggleRetroInput").is(":checked");
-        let pkmnListEN = isModern ? POKEMON_EN : OLD_POKEMON;
+        let isExpanded = $("#toggleSimpleInput").is(":checked");
+        let pkmnListEN = (isModern ? POKEMON_EN : OLD_POKEMON).flat(1).filter(x => x !== "");
+        pkmnListEN = isExpanded
+                        ? pkmnListEN.map(x => typeof x === "string" ? x : x.filter(x => !x.includes(SKIPCHAR)))
+                        : pkmnListEN.map(x => typeof x === "string" ? x 
+                                                : typeof x[0] === "string" ? [x[0]]: x.filter((e, i) => i === 0 || Array.isArray(e)));
         canSkip = true;
         if (i >= indices.length) return; // maybe put a victory screen here idk
         quizInput.attr("readonly", false);
         answerImg.empty();
         quizInput.val('');
-        let monEN = pkmnListEN.flat(2)[indices[i]];
+        let monEN = pkmnListEN.flat(1)[indices[i]];
         [answer, id] = findId(monEN, pkmnListEN);
         answer = allAnswers.find((mon) => mon.nameEN === answer).name;
+        if (!isExpanded) answer = answer.split(/ \(| \/ /)[0];
         id = isModern ? `modern/${id}` : `old/${id.slice(1)}`;
         pics = typeof monEN === "string"
                     ? [id]
@@ -118,9 +124,16 @@
                                 : "modern/" + ("000" + x[0].slice(0, x[0].indexOf(DELIMITER))).slice(-4)
                                     + DELIMITER
                                     + x[0].split(DELIMITER).pop().toLowerCase());
+        if (!isExpanded) pics = [pics[0]];
         quizAudio.attr("src", `/public/cries/${id.replace("%", "%25")}.mp3`);
         quizAudio.trigger("play");
         quizInput.select();
+    }
+
+    // get the current size of each gen
+    function getSizes() {
+        let cur_sizes = $("#toggleRetroInput").is(":checked") ? sizes : old_sizes;
+        return $("#toggleSimpleInput").is(":checked") ? cur_sizes : simple_sizes.slice(0, cur_sizes.length);
     }
 
     // wait for the user to press enter, then get one cry
@@ -161,36 +174,57 @@
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
     }
 
-    answers = getAnswers(pkmn);
-    let old_answers = getAnswers(OLD_POKEMON.flat(2));
-    allAnswers = answers.map((mon, idx) => ({name: mon,
-                                        nameEN: mon,
-                                        cryIdx: idx,
-                                        retro: old_answers.includes(mon)
-                    })).sort((a, b) => a.name.localeCompare(b.name));
-    for (let x of allAnswers) searchResults.append(`<li class="listItem${old_answers.includes(x.name) ? "" : " retroItem"}">${x.name}</li>`);
-    answers = allAnswers.filter((mon) => mon.retro || $("#toggleRetroInput").is(":checked")).map((mon) => mon.name);
+    answers = getAnswers(pkmn, "langEN");
+    let old_answers = getAnswers(OLD_POKEMON.flat(2), "langEN");
+    let cryIdx = -1;
+    allAnswers = answers.map((mon, idx) => ({name: mon.includes(SKIPCHAR) ? mon.replace(SKIPCHAR, "").split(" (")[0] : mon,
+                                            nameEN: mon,
+                                            cryIdx: mon.includes(SKIPCHAR) ? cryIdx : ++cryIdx,
+                                            retro: old_answers.includes(mon),
+                                            simple: mon.includes(SKIPCHAR)
+                                                    ? 1 + POKEMON.flat(1).findIndex(x => typeof x[0] === "string"
+                                                                                            // TODO: scuffed???
+                                                                                            ? x[0].split(DELIMITER)[0].includes(mon.split(" (")[0])
+                                                                                            : false)
+                                                    : mon.includes(" (")
+                                                        // TODO: futureproof?
+                                                        ? answers.find(x => x.includes(mon.split(" (")[0])) === mon
+                                                        : true,
+                            }))
+                            .sort((a, b) => a.name.localeCompare(b.name));
+    for (let x of allAnswers) searchResults.append(`<li class="listItem${
+                                                        x.retro ? "" : " retroItem"}${
+                                                        x.simple === true ? "" : " simpleItem"}${typeof x.simple === "boolean" ? "" : " suppressedSimple"
+                                                    }">${x.name}</li>`);
+    answers = allAnswers.filter((mon) => mon.retro || $("#toggleRetroInput").is(":checked"))
+                        .filter((mon) => $("#toggleSimpleInput").is(":checked") ? typeof mon.simple === "boolean" : mon.simple)
+                        .map((mon) => mon.name);
+    
     $(".listItem").each(function () {
         $(this).on("mouseover", function (event) {
+            event.preventDefault();
             $("#selectedItem").removeAttr('id');
             $(this).attr('id', "selectedItem").on("click", function (event) {
+                event.preventDefault();
                 quizInput.val($(this).text());
                 quizInput.focus();
             });
         });
     });
     
-    if ($("#toggleRetroInput").is(":checked")) {
-        indices = [...pkmn.keys()];
-    } else {
-        indices = [...OLD_POKEMON.flat(2).keys()];
-        $(".retroItem").addClass("suppressedRetro");
+    if (!$("#toggleRetroInput").is(":checked")) {
+        $(".retroItem").toggleClass("suppressedRetro");
         $("#genList").children().slice(5).each(function() {$(this).hide();});
         $("#genList").children().slice(0, 5).each(function() {
             $(this).css("background", $(this).css("background").replace(/\/modern\/0/g, "/old/").replace(/png/g, "gif"));
         });
     }
-    shuffle(indices);
+    if (!$("#toggleSimpleInput").is(":checked")) {
+        $(".simpleItem").toggleClass("suppressedSimple");
+        answers = allAnswers.filter((mon) => mon.simple).map((mon) => mon.name.split(/ \(| \/ /)[0]); // grab before " (" or " / "
+        searchResults.children().each((i, e) => $(e).text($(e).text().split(/ \(| \/ /)[0]));
+    }
+    indices = shuffle([...Array(getSizes().reduce((a, b) => a + b, 0)).keys()]);
     getOneCry(cryIndex);
     resetStats();
 
@@ -266,7 +300,7 @@
         $(element).on("click", function (event) {
             event.preventDefault();
             $(element).toggleClass("unselectedGen");
-            let s = $("#toggleRetroInput").is(":checked") ? sizes : old_sizes;
+            let s = getSizes();
             let start = s.slice(0, index).reduce((a, b) => a + b, 0);
             indices = shuffle($(element).attr("class").includes("unselectedGen")
                                 ? indices.filter((x, i) => x < start || x >= start + s[index])
@@ -280,7 +314,7 @@
     $("#showAll").on("click", function (event) {
         event.preventDefault();
         genList.children().removeClass("unselectedGen");
-        indices = shuffle([...($("#toggleRetroInput").is(":checked") ? pkmn : OLD_POKEMON.flat(2)).keys()]);
+        indices = shuffle([...Array(getSizes().reduce((a, b) => a + b, 0)).keys()]);
         resetStats();
         clearTimeout(timeout);
         getOneCry(cryIndex);
@@ -306,6 +340,8 @@
         timeout = setTimeout(getOneCry, 4000, cryIndex);
     });
 
+    // TODO: translate Palafin
+    // TODO: if in simple mode prune the answers after generatiing ["Tornadus (Incarnate)" => "Tornadus"]
     $("#langList").children().each(function (langIdx, langBtn) {
         $(langBtn).on("click", function (event) {
             event.preventDefault();
@@ -329,16 +365,17 @@
             // translate the new set of answers
             let mapToFirstFormInNewLang = function (formerLang, newLang, a) {
                 let thingy = formerLang[newLang.map((x) => Array.isArray(x) ? x[0] : x).indexOf(Array.isArray(a) ? a[0] : a)];
-                return Array.isArray(thingy) ? thingy[0] : thingy;
+                return Array.isArray(thingy) ? thingy[0]
+                        : thingy.includes(SKIPCHAR) ? thingy.replace(SKIPCHAR, "").split(DELIMITER)[0] : thingy;
             };
             answers = getAnswers(pkmn.toSorted((a, b) => mapToFirstFormInNewLang(formerLang, pkmn, a).localeCompare(
                                                         mapToFirstFormInNewLang(formerLang, pkmn, b)))
                                 , $(langBtn).attr("id"));
 
-            allAnswers.forEach((mon, idx) => mon.name = answers[idx]);
-            allAnswers.sort((a, b) => a.name.localeCompare(b.name));
+            allAnswers.forEach((mon, idx) => mon.name = answers[idx].includes(SKIPCHAR) ? answers[idx].split(/ \(|\(|（/)[0] : answers[idx]);
+            allAnswers.sort((a, b) => a.name.replace(SKIPCHAR, "").localeCompare(b.name.replace(SKIPCHAR, "")));
             // perform a text replacement on all search results and sort
-            searchResults.children().each((i, e) => $(e).text(answers[i]))
+            searchResults.children().each((i, e) => $(e).text(answers[i].replace(SKIPCHAR, "")))
                                     .sort((a, b) => $(a).text().localeCompare($(b).text()))
                                     .detach().appendTo(searchResults);
 
@@ -357,12 +394,6 @@
             $("#genList").children().slice(0, 5).each(function() {
                 $(this).css("background", $(this).css("background").replace(/\/old\//g, "/modern/0").replace(/gif/g, "png"));
             });
-            indices = shuffle(genList.children().toArray().reduce(
-                ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen")
-                                            ? [idxs.concat([...Array(sizes[i]).keys()].map(x => x + start)),
-                                                start + sizes[i]]
-                                            : [idxs, start + sizes[i]],
-                [[], 0])[0]);
         } else {
             // entering retro mode
 
@@ -371,30 +402,39 @@
             $("#genList").children().slice(0, 5).each(function() {
                 $(this).css("background", $(this).css("background").replace(/\/modern\/0/g, "/old/").replace(/png/g, "gif"));
             });
-            indices = shuffle(genList.children().toArray().reduce(
-                ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen") && $(child).is(":visible")
-                                            ? [idxs.concat([...Array(old_sizes[i]).keys()].map(x => x + start)),
-                                                start + old_sizes[i]]
-                                            : [idxs, start + old_sizes[i]],
-                [[], 0])[0]);
         }
-        answers = allAnswers.filter((mon) => mon.retro || $("#toggleRetroInput").is(":checked")).map((mon) => mon.name);
-        $(".retroItem").toggleClass("suppressedRetro");
-        resetStats();
-        clearTimeout(timeout);
-        getOneCry(cryIndex);
-    });
-
-    // TODO: Implement. This slider is unfinished and may require a structural overhaul to complete.
-    // NOTE: This structural overhaul may be complete (or mostly complete).
-    $("#toggleSimpleInput").on("click", function (event) {
-        let cur_sizes = $(this).is(":checked") ? sizes : simple_sizes;
+        let cur_sizes = getSizes();
         indices = shuffle(genList.children().toArray().reduce(
             ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen") && $(child).is(":visible")
                                         ? [idxs.concat([...Array(cur_sizes[i]).keys()].map(x => x + start)),
                                             start + cur_sizes[i]]
                                         : [idxs, start + cur_sizes[i]],
             [[], 0])[0]);
+        answers = allAnswers.filter((mon) => mon.retro || $(this).is(":checked")).map((mon) => mon.name);
+        $(".retroItem").toggleClass("suppressedRetro");
+        resetStats();
+        clearTimeout(timeout);
+        getOneCry(cryIndex);
+    });
+
+    $("#toggleSimpleInput").on("click", function (event) {
+        if ($(this).is(":checked")) {
+            // entering expanded mode
+            answers = allAnswers.filter((mon) => typeof mon.simple === "boolean").map((mon) => mon.name);
+            searchResults.children().each((i, e) => $(e).text(allAnswers[i].name));
+        } else {
+            // entering simple mode
+            answers = allAnswers.filter((mon) => mon.simple).map((mon) => mon.name.split(/ \(| \/ /)[0]); // grab before " (" or " / "
+            searchResults.children().each((i, e) => $(e).text($(e).text().split(/ \(| \/ /)[0]));
+        }
+        let cur_sizes = getSizes();
+        indices = shuffle(genList.children().toArray().reduce(
+            ([idxs, start], child, i) => !$(child).attr("class").includes("unselectedGen") && $(child).is(":visible")
+                                        ? [idxs.concat([...Array(cur_sizes[i]).keys()].map(x => x + start)),
+                                            start + cur_sizes[i]]
+                                        : [idxs, start + cur_sizes[i]],
+            [[], 0])[0]);
+        $(".simpleItem").toggleClass("suppressedSimple");
         resetStats();
         clearTimeout(timeout);
         getOneCry(cryIndex);
