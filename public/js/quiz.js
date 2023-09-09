@@ -340,8 +340,6 @@
         timeout = setTimeout(getOneCry, 4000, cryIndex);
     });
 
-    // TODO: translate Palafin
-    // TODO: if in simple mode prune the answers after generatiing ["Tornadus (Incarnate)" => "Tornadus"]
     $("#langList").children().each(function (langIdx, langBtn) {
         $(langBtn).on("click", function (event) {
             event.preventDefault();
@@ -371,6 +369,7 @@
             answers = getAnswers(pkmn.toSorted((a, b) => mapToFirstFormInNewLang(formerLang, pkmn, a).localeCompare(
                                                         mapToFirstFormInNewLang(formerLang, pkmn, b)))
                                 , $(langBtn).attr("id"));
+            if (!$("#toggleSimpleInput").is(":checked")) answers = answers.map(x => x.split(/ \(|\(|（| \/ |・/)[0]);
 
             allAnswers.forEach((mon, idx) => mon.name = answers[idx].includes(SKIPCHAR) ? answers[idx].split(/ \(|\(|（/)[0] : answers[idx]);
             allAnswers.sort((a, b) => a.name.replace(SKIPCHAR, "").localeCompare(b.name.replace(SKIPCHAR, "")));
