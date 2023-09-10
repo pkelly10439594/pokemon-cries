@@ -340,6 +340,8 @@
         timeout = setTimeout(getOneCry, 4000, cryIndex);
     });
 
+    // TODO: after pressing one of these buttons in simple mode, Palafin's answer becomes "!Palafin"
+    // CHECK:does this happen if i change language THEN go to simple mode?
     $("#langList").children().each(function (langIdx, langBtn) {
         $(langBtn).on("click", function (event) {
             event.preventDefault();
@@ -371,14 +373,16 @@
                                 , $(langBtn).attr("id"));
             if (!$("#toggleSimpleInput").is(":checked")) answers = answers.map(x => x.split(/ \(|\(|（| \/ |・/)[0]);
 
-            allAnswers.forEach((mon, idx) => mon.name = answers[idx].includes(SKIPCHAR) ? answers[idx].split(/ \(|\(|（/)[0] : answers[idx]);
-            allAnswers.sort((a, b) => a.name.replace(SKIPCHAR, "").localeCompare(b.name.replace(SKIPCHAR, "")));
+            allAnswers.forEach((mon, idx) => mon.name = answers[idx].includes(SKIPCHAR)
+                                                        ? answers[idx].replace(SKIPCHAR, "").split(/ \(|\(|（/)[0]
+                                                        : answers[idx]);
+            allAnswers.sort((a, b) => a.name.localeCompare(b.name));
             // perform a text replacement on all search results and sort
             searchResults.children().each((i, e) => $(e).text(answers[i].replace(SKIPCHAR, "")))
                                     .sort((a, b) => $(a).text().localeCompare($(b).text()))
                                     .detach().appendTo(searchResults);
 
-            answers.forEach((mon, idx) => answers[idx] = allAnswers[idx].name);
+            answers = allAnswers.filter(x => $("#toggleSimpleInput").is(":checked") ? typeof x === "boolean" : x.simple).map(x => x.name);
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
