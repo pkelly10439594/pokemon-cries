@@ -82,9 +82,11 @@
                                         ? v
                                         : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, openParen)}${closeParen}`).join(slash))
                             : list.includes(x[0].substring(0, x[0].indexOf(DELIMITER)))
-                                ? `${x[0].substring(0, x[0].indexOf(DELIMITER))}${openParen}${x.slice(1).reduce((str, cur) => `${str}${slash}${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
-                                                                                                            x[0].substring(x[0].indexOf(DELIMITER) + 1))}${closeParen}`
-                                : x[0].substring(0, x[0].indexOf(DELIMITER))))
+                                ? `${x[0].substring(0, x[0].indexOf(DELIMITER))}${openParen}${
+                                                x.slice(1).reduce((str, cur) => 
+                                                            `${str}${slash}${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
+                                                                        x[0].substring(x[0].indexOf(DELIMITER) + 1))}${closeParen}`
+                                : x[0].substring(0, x[0].indexOf(DELIMITER))));
     }
 
     // shuffle the indices (Fisher-Yates algorithm)
@@ -382,7 +384,9 @@
                                     .sort((a, b) => $(a).text().localeCompare($(b).text()))
                                     .detach().appendTo(searchResults);
 
-            answers = allAnswers.filter(x => $("#toggleSimpleInput").is(":checked") ? typeof x === "boolean" : x.simple).map(x => x.name);
+            answers = allAnswers.filter(x => ($("#toggleRetroInput").is(":checked") ? true : x.retro) && 
+                                            ($("#toggleSimpleInput").is(":checked") ? typeof x.simple === "boolean" : x.simple))
+                                .map(x => x.name);
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
@@ -391,16 +395,12 @@
     $("#toggleRetroInput").on("click", function (event) {
         if ($(this).is(":checked")) {
             // entering modern mode
-
-            // show all gens after the first 5
             $("#genList").children().slice(5).each(function() {$(this).show();});
             $("#genList").children().slice(0, 5).each(function() {
                 $(this).css("background", $(this).css("background").replace(/\/old\//g, "/modern/0").replace(/gif/g, "png"));
             });
         } else {
             // entering retro mode
-
-            // hide all gens after the first 5
             $("#genList").children().slice(5).each(function() {$(this).hide();});
             $("#genList").children().slice(0, 5).each(function() {
                 $(this).css("background", $(this).css("background").replace(/\/modern\/0/g, "/old/").replace(/png/g, "gif"));
