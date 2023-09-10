@@ -140,6 +140,7 @@
 
     // wait for the user to press enter, then get one cry
     async function awaitEnter() {
+        $("#awaitEnter").show();
         await new Promise((resolve) => {
             document.addEventListener('keydown', waitForEnter);
             function waitForEnter(e) {
@@ -150,6 +151,7 @@
                 }
             }
         });
+        $("#awaitEnter").hide();
         getOneCry(cryIndex);
     }
 
@@ -166,6 +168,9 @@
             class="revealImg${pics.length}${isModern ? "" : " retro"}" id="img${i}">`)));
         answerImg.append("<br>");
         quizAudio.trigger("play");
+        timeout = $("#toggleSlowInput").is(":checked")
+                    ? setTimeout(getOneCry, 4000, cryIndex)
+                    : setTimeout(awaitEnter, quizAudio[0].duration * 1000);
     }
 
     function resetStats() {
@@ -292,10 +297,6 @@
         $("#curStreak").text(`Current streak: ${++currStreak}`);
         if (currStreak > longestStreak)
             $("#maxStreak").text(`Longest streak: ${longestStreak = currStreak}`);
-        if ($("#toggleSlowInput").is(":checked"))
-            timeout = setTimeout(getOneCry, 4000, cryIndex);
-        else
-            timeout = setTimeout(awaitEnter, quizAudio[0].duration * 1000); // wait until the cry finishes
     });
 
     genList.children().each(function (index, element) {
@@ -339,7 +340,6 @@
         $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
         $("#curStreak").text(`Current streak: ${currStreak = 0}`);
         $("#skipsUsed").text(`Skips used: ${++skipsUsed}`);
-        timeout = setTimeout(getOneCry, 4000, cryIndex);
     });
 
     // TODO: after pressing one of these buttons in simple mode, Palafin's answer becomes "!Palafin"
