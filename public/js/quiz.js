@@ -176,6 +176,8 @@
     function resetStats() {
         cryIndex = currStreak = longestStreak = skipsUsed = 0;
         $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+        // if ($("#toggleUnboundInput").is(":checked")) $("#curStreak").text(`Current Streak: 0`);
+        // else
         $("#curStreak").text(`Current streak: ${currStreak}`);
         $("#maxStreak").text(`Longest streak: ${longestStreak}`);
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
@@ -219,6 +221,15 @@
         });
     });
     
+    indices = [...Array(getSizes().reduce((a, b) => a + b, 0)).keys()];
+    
+    // if ($("#toggleUnboundInput").is(":checked")) {
+    //     cryIndex = indices[Math.floor(Math.random() * indices.length)];
+    //     $("#completed").hide();
+    //     $("#maxStreak").hide();
+    //     $("#skipsUsed").hide();
+    // } else
+    shuffle(indices);
     if (!$("#toggleRetroInput").is(":checked")) {
         $(".retroItem").toggleClass("suppressedRetro");
         $("#genList").children().slice(5).each(function() {$(this).hide();});
@@ -231,7 +242,6 @@
         answers = allAnswers.filter((mon) => mon.simple).map((mon) => mon.name.split(/ \(| \/ /)[0]); // grab before " (" or " / "
         searchResults.children().each((i, e) => $(e).text($(e).text().split(/ \(| \/ /)[0]));
     }
-    indices = shuffle([...Array(getSizes().reduce((a, b) => a + b, 0)).keys()]);
     getOneCry(cryIndex);
     resetStats();
 
@@ -278,8 +288,9 @@
             || (isHardcore && !answers.includes(quizInput.val()))) return;
         event.preventDefault();
 
-        revealAnswer();
+        // console.log(cryIdx);
         $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
+        revealAnswer();
         if (isHardcore && quizInput.val() !== answer) {
             currStreak = -1; // will be incremented to 0 on display
             quizInput.val(answer);
@@ -309,6 +320,7 @@
                                 ? indices.filter((x, i) => x < start || x >= start + s[index])
                                 : indices.concat([...Array(s[index]).keys()].map(x => x + start)));
             resetStats();
+            // console.log(indices);
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
@@ -336,8 +348,8 @@
         event.preventDefault();
 
         quizInput.val(answer);
-        revealAnswer();
         $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
+        revealAnswer();
         $("#curStreak").text(`Current streak: ${currStreak = 0}`);
         $("#skipsUsed").text(`Skips used: ${++skipsUsed}`);
     });

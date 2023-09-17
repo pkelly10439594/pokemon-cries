@@ -344,6 +344,20 @@ h1, p {
     text-align: right;
 }
 
+#toggleUnboundSlider::after {
+    content: "Unbound";
+    background: url("/public/images/modern/0720_unbound.png") no-repeat right / 50px,
+                #c72380;
+    text-align: left;
+}
+
+#toggleUnboundSlider::before {
+    content: "Confined";
+    background: url("/public/images/modern/0720_confined.png") no-repeat left / 50px,
+                #ddd1ea;
+    text-align: right;
+}
+
 #toggleRetroSlider::after {
     content: "Modern";
     background: url("/public/images/modern/0025.png") no-repeat right / 50px,

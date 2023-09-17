@@ -461,7 +461,7 @@ const POKEMON_EN = [[
     "Zarude",
     "Regieleki", "Regidrago",
     "Glastrier", "Spectrier", ["Calyrex", "Calyrex_Ice", "Calyrex_Shadow"],
-    "Wyrdeer", "Kleavor", "Ursaluna", [["Basculegion_Male", "Basculegion_Female"]], "Sneasler", "Overqwil",
+    "Wyrdeer", "Kleavor", ["Ursaluna", "Ursaluna_Bloodmoon"], [["Basculegion_Male", "Basculegion_Female"]], "Sneasler", "Overqwil",
     ["Enamorus_Incarnate", "Enamorus_Therian"]
 ], [
     "Sprigatito", "Floragato", "Meowscarada",
@@ -510,7 +510,11 @@ const POKEMON_EN = [[
     "Wo-Chien", "Chien-Pao", "Ting-Lu", "Chi-Yu",
     "Roaring Moon", "Iron Valiant",
     "Koraidon", "Miraidon",
-    "Walking Wake", "Iron Leaves"
+    "Walking Wake", "Iron Leaves",
+    "Dipplin",
+    "Poltchageist", "Sinistcha",
+    "Okidogi", "Munkidori", "Fezandipiti",
+    [["Ogerpon_Teal", "Ogerpon_Wellspring", "Ogerpon_Hearthflame", "Ogerpon_Cornerstone"]]
 ]];
 
 // retro mode filter tools
@@ -1031,7 +1035,7 @@ const POKEMON_JP = [[
     "ザルード",
     "レジエレキ", "レジドラゴ",
     "ブリザポス", "レイスポス", ["バドレックス", "バドレックス_はくばじょう", "バドレックス_こくばじょう"],
-    "アヤシシ", "バサギリ", "ガチグマ", [["イダイトウ_オス", "イダイトウ_メス"]], "オオニューラ", "ハリーマン",
+    "アヤシシ", "バサギリ", ["ガチグマ", "ガチグマ_アカツキ"], [["イダイトウ_オス", "イダイトウ_メス"]], "オオニューラ", "ハリーマン",
     ["ラブトロス_けしん", "ラブトロス_れいじゅう"]
 ], [
     "ニャオハ", "ニャローテ", "マスカーニャ",
@@ -1079,7 +1083,11 @@ const POKEMON_JP = [[
     "チオンジェン", "パオジアン", "ディンルー", "イーユイ",
     "トドロクツキ", "テツノブジン",
     "コライドン", "ミライドン",
-    "ウネルミナモ", "テツノイサハ"
+    "ウネルミナモ", "テツノイサハ",
+    "カミッチュ",
+    "チャデス", "ヤバソチャ",
+    "イイネイヌ", "マシマシラ", "キチキギス",
+    [["オーガポン_みどり", "オーガポン_いど", "オーガポン_かまど", "オーガポン_いしずえ"]]
 ]];
 
 const POKEMON_FR = [[
@@ -1541,7 +1549,7 @@ const POKEMON_FR = [[
     "Zarude",
     "Regieleki", "Regidrago",
     "Blizzeval", "Spectreval", ["Sylveroy", "Sylveroy_Froid", "Sylveroy_Effroi"],
-    "Cerbyllin", "Hachécateur", "Ursaking", [["Paragruel_Mâle", "Paragruel_Femelle"]], "Farfurex", "Qwilpik",
+    "Cerbyllin", "Hachécateur", ["Ursaking", "Ursaking_Lune Vermeille"], [["Paragruel_Mâle", "Paragruel_Femelle"]], "Farfurex", "Qwilpik",
     ["Amovénus_Avatar", "Amovénus_Totémique"]
 ], [
     "Poussacha", "Matourgeon", "Miascarade",
@@ -1589,7 +1597,11 @@ const POKEMON_FR = [[
     "Chongjian", "Baojian", "Dinglu", "Yuyu",
     "Rugit-Lune", "Garde-de-Fer",
     "Koraidon", "Miraidon",
-    "Serpente-Eau", "Vert-de-Fer"
+    "Serpente-Eau", "Vert-de-Fer",
+    "Pomdramour",
+    "Poltchageist", "Théffroyable",
+    "Félicanis", "Fortusimia", "Favianos",
+    [["Ogerpon_Turqoise", "Ogerpon_Puits", "Ogerpon_Fourneau", "Ogerpon_Pierre"]]
 ]];
 
 const POKEMON_ES = [[
@@ -2051,7 +2063,7 @@ const POKEMON_ES = [[
     "Zarude",
     "Regieleki", "Regidrago",
     "Glastrier", "Spectrier", ["Calyrex", "Calyrex_Glacial", "Calyrex_Espectral"],
-    "Wyrdeer", "Kleavor", "Ursaluna", [["Basculegion_Macho", "Basculegion_Hembra"]], "Sneasler", "Overqwil",
+    "Wyrdeer", "Kleavor", ["Ursaluna", "Ursaluna_Luna Carmesí"],[["Basculegion_Macho", "Basculegion_Hembra"]], "Sneasler", "Overqwil",
     ["Enamorus_Avatar", "Enamorus_Tótem"]
 ], [
     "Sprigatito", "Floragato", "Meowscarada",
@@ -2099,7 +2111,11 @@ const POKEMON_ES = [[
     "Wo-Chien", "Chien-Pao", "Ting-Lu", "Chi-Yu",
     "Bramaluna", "Ferropaladín",
     "Koraidon", "Miraidon",
-    "Ondulagua", "Ferroverdor"
+    "Ondulagua", "Ferroverdor",
+    "Dipplin",
+    "Poltchageist", "Sinistcha",
+    "Okidogi", "Munkidori", "Fezandipiti",
+    [["Ogerpon_Turquesa", "Ogerpon_Fuente", "Ogerpon_Horno", "Ogerpon_Cimiento"]]
 ]];
 
 const POKEMON_DE = [[
@@ -2561,7 +2577,7 @@ const POKEMON_DE = [[
     "Zarude",
     "Regieleki", "Regidrago",
     "Polaross", "Phantoross", ["Coronospa", "Coronospa_Schimmelreiter", "Coronospa_Rappenreiter"],
-    "Dammythir", "Axantor", "Ursaluna", [["Salmagnis_Männlich", "Salmagnis_Weiblich"]], "Snieboss", "Myriador",
+    "Dammythir", "Axantor", ["Ursaluna", "Ursaluna_Blutmond"], [["Salmagnis_Männlich", "Salmagnis_Weiblich"]], "Snieboss", "Myriador",
     ["Cupidos_Inkarnationsform", "Cupidos_Tiergeistform"]
 ], [
     "Felori", "Feliospa", "Maskagato",
@@ -2609,7 +2625,11 @@ const POKEMON_DE = [[
     "Chongjian", "Baojian", "Dinglu", "Yuyu",
     "Donnersichel", "Eisenkrieger",
     "Koraidon", "Miraidon",
-    "Windewoge", "Eisenblatt"
+    "Windewoge", "Eisenblatt",
+    "Sirapfel",
+    "Mortcha", "Fatalitcha",
+    "Boninu", "Benesaru", "Beatori",
+    [["Ogerpon_Türkisgrüne", "Ogerpon_Brunnen", "Ogerpon_Ofen", "Ogerpon_Fundament"]]
 ]];
 
 const POKEMON_IT = [[
@@ -3071,7 +3091,7 @@ const POKEMON_IT = [[
     "Zarude",
     "Regieleki", "Regidrago",
     "Glastrier", "Spectrier", ["Calyrex", "Calyrex_Glaciale", "Calyrex_Spettrale"],
-    "Wyrdeer", "Kleavor", "Ursaluna", [["Basculegion_Maschio", "Basculegion_Femmina"]], "Sneasler", "Overqwil",
+    "Wyrdeer", "Kleavor", ["Ursaluna", "Ursaluna_Luna Cremisi"], [["Basculegion_Maschio", "Basculegion_Femmina"]], "Sneasler", "Overqwil",
     ["Enamorus_Incarnazione", "Enamorus_Totem"]
 ], [
     "Sprigatito", "Floragato", "Meowscarada",
@@ -3119,7 +3139,11 @@ const POKEMON_IT = [[
     "Wo-Chien", "Chien-Pao", "Ting-Lu", "Chi-Yu",
     "Lunaruggente", "Eroeferreo",
     "Koraidon", "Miraidon",
-    "Acquecrespe", "Fogliaferrea"
+    "Acquecrespe", "Fogliaferrea",
+    "Dipplin",
+    "Poltchageist", "Sinistcha",
+    "Okidogi", "Munkidori", "Fezandipiti",
+    [["Ogerpon_Turchese", "Ogerpon_Pozzo", "Ogerpon_Focolare", "Ogerpon_Fondamenta"]]
 ]];
 
 const POKEMON_KR = [[
@@ -3581,7 +3605,7 @@ const POKEMON_KR = [[
     "자루도",
     "레지에레키", "레지드래고",
     "블리자포스", "레이스포스", ["버드렉스", "버드렉스_백마", "버드렉스_흑마"],
-    "신비록", "사마자르", "다투곰", [["대쓰여너_수컷", "대쓰여너_암컷"]], "포푸니크", "장침바루",
+    "신비록", "사마자르", ["다투곰", "다투곰_붉은 달"], [["대쓰여너_수컷", "대쓰여너_암컷"]], "포푸니크", "장침바루",
     ["러브로스_화신", "러브로스_영물"]
 ], [
     "나오하", "나로테", "마스카나",
@@ -3629,7 +3653,11 @@ const POKEMON_KR = [[
     "총지엔", "파오젠", "딩루", "위유이",
     "고동치는달", "무쇠무인",
     "코라이돈", "미라이돈",
-    "굽이치는물결", "무쇠잎새"
+    "굽이치는물결", "무쇠잎새",
+    "과미르",
+    "차데스", "그우린차",
+    "조타구", "이야후", "기로치",
+    [["오거폰_벽록", "오거폰_우물", "오거폰_화덕", "오거폰_주춧돌"]]
 ]];
 
 const POKEMON_ZH_T = [[
@@ -4091,7 +4119,7 @@ const POKEMON_ZH_T = [[
     "薩戮德",
     "雷吉艾勒奇", "雷吉鐸拉戈",
     "雪暴馬", "靈幽馬", ["蕾冠王", "蕾冠王_騎白馬", "蕾冠王_騎黑馬"],
-    "詭角鹿", "劈斧螳螂", "月月熊", [["幽尾玄魚_雄性", "幽尾玄魚_雌性"]], "大狃拉", "萬針魚",
+    "詭角鹿", "劈斧螳螂", ["月月熊", "月月熊_赫月"], [["幽尾玄魚_雄性", "幽尾玄魚_雌性"]], "大狃拉", "萬針魚",
     ["眷戀雲_化身", "眷戀雲_靈獸"]
 ], [
     "新葉喵", "蒂蕾喵", "魔幻假面喵",
@@ -4139,7 +4167,11 @@ const POKEMON_ZH_T = [[
     "古簡蝸", "古劍豹", "古鼎鹿", "古玉魚",
     "轟鳴月", "鐵武者",
     "故勒頓", "密勒頓",
-    "波盪水", "鐵斑葉"
+    "波盪水", "鐵斑葉",
+    "裹蜜蟲",
+    "斯魔茶", "來悲粗茶",
+    "夠讚狗", "願增猿", "吉雉雞",
+    [["厄鬼椪_碧草", "厄鬼椪_水井", "厄鬼椪_火灶", "厄鬼椪_礎石"]]
 ]];
 
 const POKEMON_ZH_S = [[
@@ -4601,7 +4633,7 @@ const POKEMON_ZH_S = [[
     "萨戮德",
     "雷吉艾勒奇", "雷吉铎拉戈",
     "雪暴马", "灵幽马", ["蕾冠王", "蕾冠王_骑白马", "蕾冠王_骑黑马"],
-    "诡角鹿", "劈斧螳螂", "月月熊", [["幽尾玄鱼_雄性", "幽尾玄鱼_雌性"]], "大狃拉", "万针鱼",
+    "诡角鹿", "劈斧螳螂", ["月月熊", "月月熊_赫月"], [["幽尾玄鱼_雄性", "幽尾玄鱼_雌性"]], "大狃拉", "万针鱼",
     ["眷恋云_化身", "眷恋云_灵兽"]
 ], [
     "新叶喵", "蒂蕾喵", "魔幻假面喵",
@@ -4649,5 +4681,9 @@ const POKEMON_ZH_S = [[
     "古简蜗", "古剑豹", "古鼎鹿", "古玉鱼",
     "轰鸣月", "铁武者",
     "故勒顿", "密勒顿",
-    "波荡水", "铁斑叶"
+    "波荡水", "铁斑叶",
+    "裹蜜虫",
+    "斯魔茶 ", "来悲粗茶",
+    "够赞狗", "愿增猿", "吉雉鸡",
+    [["厄诡椪_碧草", "厄诡椪_水井", "厄诡椪_火灶", "厄诡椪_础石"]]
 ]];
