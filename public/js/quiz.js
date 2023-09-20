@@ -12,7 +12,7 @@
     var old_sizes = [151, 100, 135, 108, 161];
     var simple_sizes = POKEMON.map(gen => gen.length);
     var indices;
-    var cryIndex = currStreak = longestStreak = skipsUsed = 0;
+    var cryIndex = currStreak = longestStreak = skipsUsed = totalRight = 0;
     var answers, allAnswers;
     var answer, id, pics;
     var canSkip = true;
@@ -181,6 +181,7 @@
         $("#curStreak").text(`Current streak: ${currStreak}`);
         $("#maxStreak").text(`Longest streak: ${longestStreak}`);
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
+        $("#precision").text(`Accuracy: -%`);
     }
 
     answers = getAnswers(pkmn, "langEN");
@@ -288,7 +289,6 @@
             || (isHardcore && !answers.includes(quizInput.val()))) return;
         event.preventDefault();
 
-        // console.log(cryIdx);
         $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
         revealAnswer();
         if (isHardcore && quizInput.val() !== answer) {
@@ -304,10 +304,11 @@
                                                 "-moz-transition": "background 0.5s linear", "-ms-transition": "background 0.5s linear",
                                                 "-o-transition": "background 0.5s linear", "transition": "background 0.5s linear"
                                             });}, 1); // do this 1ms later
-        }
+        } else ++totalRight;
         $("#curStreak").text(`Current streak: ${++currStreak}`);
         if (currStreak > longestStreak)
             $("#maxStreak").text(`Longest streak: ${longestStreak = currStreak}`);
+        $("#precision").text(`Accuracy: ${(100 * totalRight / cryIndex).toFixed(2)}%`);
     });
 
     genList.children().each(function (index, element) {
@@ -352,6 +353,7 @@
         revealAnswer();
         $("#curStreak").text(`Current streak: ${currStreak = 0}`);
         $("#skipsUsed").text(`Skips used: ${++skipsUsed}`);
+        $("#precision").text(`Accuracy: ${(100 * totalRight / cryIndex).toFixed(2)}%`);
     });
 
     // TODO: after pressing one of these buttons in simple mode, Palafin's answer becomes "!Palafin"
