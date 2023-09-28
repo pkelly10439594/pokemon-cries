@@ -20,7 +20,7 @@ h1, p {
     display: flex;
 }
 
-.cryButton, .toggleSwitch, #genSelector, #langSelector, #skipButton {
+.cryButton, .toggleSwitch, #genSelector, #langSelector, #skipButton, #resultsButton {
     /* make the text unhighlightable. */
     user-select: none;
     -moz-user-select: none;
@@ -302,7 +302,7 @@ h1, p {
     background-color: #dddddd;
 }
 
-#skipButton {
+#skipButton, #resultsButton {
     border-radius: 20px;
     border: 2px solid #000000;
     background-color: #dddddd;
@@ -311,7 +311,7 @@ h1, p {
     margin: 15px;
 }
 
-#skipButton:hover {
+#skipButton:hover, #resultsButton:hover {
     filter: brightness(75%);
     cursor: pointer;
 }

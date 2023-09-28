@@ -16,6 +16,7 @@
     var answers, allAnswers;
     var answer, id, pics;
     var canSkip = true;
+    var logging = [];
 
     function findId(mon, pkmnList) {
         // if the pokemon has multiple forms with the same cry
@@ -101,17 +102,19 @@
     function getOneCry(i) {
         let isModern = $("#toggleRetroInput").is(":checked");
         let isExpanded = $("#toggleSimpleInput").is(":checked");
+        let isUnbound = $("#toggleUnboundInput").is(":checked")
+        let cryIdx = isUnbound ? Math.floor(Math.random() * indices.length) : i;
         let pkmnListEN = (isModern ? POKEMON_EN : OLD_POKEMON).flat(1).filter(x => x !== "");
         pkmnListEN = isExpanded
                         ? pkmnListEN.map(x => typeof x === "string" ? x : x.filter(x => !x.includes(SKIPCHAR)))
                         : pkmnListEN.map(x => typeof x === "string" ? x 
                                                 : typeof x[0] === "string" ? [x[0]]: x.filter((e, i) => i === 0 || Array.isArray(e)));
         canSkip = true;
-        if (i >= indices.length) return; // maybe put a victory screen here idk
+        if (!isUnbound && i >= indices.length) return; // maybe put a victory screen here idk
         quizInput.attr("readonly", false);
         answerImg.empty();
         quizInput.val('');
-        let monEN = pkmnListEN.flat(1)[indices[i]];
+        let monEN = pkmnListEN.flat(1)[indices[cryIdx]];
         [answer, id] = findId(monEN, pkmnListEN);
         answer = allAnswers.find((mon) => mon.nameEN === answer).name;
         if (!isExpanded) answer = answer.split(/ \(| \/ /)[0];
@@ -143,12 +146,20 @@
         $("#awaitEnter").show();
         await new Promise((resolve) => {
             document.addEventListener('keydown', waitForEnter);
+            // TODO: clicking a button causes a DOMException. i have no clue why but it seems to have minimal impact so leave it
+            $(".genList").each((i, e) => $(e).on('click', onClick));
+            $(".toggleInput").each((i, e) => $(e).on('click', onClick));
             function waitForEnter(e) {
                 // 13 => enter key
                 if  (e.keyCode === 13) {
                     document.removeEventListener('keydown', waitForEnter);
                     resolve();
                 }
+            }
+            function onClick(e) {
+                $(".genList").each((i, e) => $(e).off('click', onClick));
+                $(".toggleInput").each((i, e) => $(e).off('click', onClick));
+                resolve();
             }
         });
         $("#awaitEnter").hide();
@@ -174,14 +185,15 @@
     }
 
     function resetStats() {
-        cryIndex = currStreak = longestStreak = skipsUsed = 0;
+        cryIndex = currStreak = longestStreak = skipsUsed = totalRight = 0;
         $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
-        // if ($("#toggleUnboundInput").is(":checked")) $("#curStreak").text(`Current Streak: 0`);
-        // else
+        if ($("#toggleUnboundInput").is(":checked"))
+            return $("#curStreak").text(`Current Streak: 0`);
         $("#curStreak").text(`Current streak: ${currStreak}`);
         $("#maxStreak").text(`Longest streak: ${longestStreak}`);
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
         $("#precision").text(`Accuracy: -%`);
+        logging = [];
     }
 
     answers = getAnswers(pkmn, "langEN");
@@ -224,13 +236,12 @@
     
     indices = [...Array(getSizes().reduce((a, b) => a + b, 0)).keys()];
     
-    // if ($("#toggleUnboundInput").is(":checked")) {
-    //     cryIndex = indices[Math.floor(Math.random() * indices.length)];
-    //     $("#completed").hide();
-    //     $("#maxStreak").hide();
-    //     $("#skipsUsed").hide();
-    // } else
-    shuffle(indices);
+    if ($("#toggleUnboundInput").is(":checked")) {
+        $("#completed").hide();
+        $("#maxStreak").hide();
+        $("#skipsUsed").hide();
+        $("#precision").hide();
+    } else shuffle(indices);
     if (!$("#toggleRetroInput").is(":checked")) {
         $(".retroItem").toggleClass("suppressedRetro");
         $("#genList").children().slice(5).each(function() {$(this).hide();});
@@ -293,6 +304,8 @@
         revealAnswer();
         if (isHardcore && quizInput.val() !== answer) {
             currStreak = -1; // will be incremented to 0 on display
+            let len = quizInput.val().length;
+            logging.push(`${quizInput.val()}${" ".repeat(len <= 24 ? 24 - len : len % 8 === 0 ? 0 : 8 - len % 8)}=> ${answer}`);
             quizInput.val(answer);
 
             // flash the screen red
@@ -321,7 +334,6 @@
                                 ? indices.filter((x, i) => x < start || x >= start + s[index])
                                 : indices.concat([...Array(s[index]).keys()].map(x => x + start)));
             resetStats();
-            // console.log(indices);
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
@@ -348,6 +360,7 @@
         if (!canSkip) return;
         event.preventDefault();
 
+        logging.push(`SKIPPED                 => ${answer}`);
         quizInput.val(answer);
         $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
         revealAnswer();
@@ -356,8 +369,13 @@
         $("#precision").text(`Accuracy: ${(100 * totalRight / cryIndex).toFixed(2)}%`);
     });
 
-    // TODO: after pressing one of these buttons in simple mode, Palafin's answer becomes "!Palafin"
-    // CHECK:does this happen if i change language THEN go to simple mode?
+    $("#resultsButton").on("click", function (event) {
+        event.preventDefault();
+        let text = logging.join("\n");
+        // TODO: replace this with a download
+        console.log(text);
+    });
+
     $("#langList").children().each(function (langIdx, langBtn) {
         $(langBtn).on("click", function (event) {
             event.preventDefault();
@@ -404,6 +422,17 @@
             clearTimeout(timeout);
             getOneCry(cryIndex);
         });
+    });
+
+    $("#toggleUnboundInput").on("click", function (event) {
+        if (!$(this).is(":checked")) shuffle(indices);
+        $("#completed").toggle();
+        $("#maxStreak").toggle();
+        $("#skipsUsed").toggle();
+        $("#precision").toggle();
+        resetStats();
+        clearTimeout(timeout);
+        getOneCry(cryIndex);
     });
 
     $("#toggleRetroInput").on("click", function (event) {

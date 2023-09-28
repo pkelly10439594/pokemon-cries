@@ -47,6 +47,7 @@
             else // element is a species with multiple cries
                 species.forEach((cry) => {
                     if (typeof(cry) === 'string') { // this cry only has one form
+                        if (cry.includes(SKIPCHAR)) return;
                         let ending = cry.includes(DELIMITER)
                             ? cry.slice(cry.indexOf(DELIMITER)).toLowerCase()
                             : "";
