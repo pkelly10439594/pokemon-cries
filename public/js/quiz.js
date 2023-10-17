@@ -187,8 +187,6 @@
     function resetStats() {
         cryIndex = currStreak = longestStreak = skipsUsed = totalRight = 0;
         $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
-        if ($("#toggleUnboundInput").is(":checked"))
-            return $("#curStreak").text(`Current Streak: 0`);
         $("#curStreak").text(`Current streak: ${currStreak}`);
         $("#maxStreak").text(`Longest streak: ${longestStreak}`);
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
@@ -238,9 +236,7 @@
     
     if ($("#toggleUnboundInput").is(":checked")) {
         $("#completed").hide();
-        $("#maxStreak").hide();
         $("#skipsUsed").hide();
-        $("#precision").hide();
     } else shuffle(indices);
     if (!$("#toggleRetroInput").is(":checked")) {
         $(".retroItem").toggleClass("suppressedRetro");
@@ -427,9 +423,7 @@
     $("#toggleUnboundInput").on("click", function (event) {
         if (!$(this).is(":checked")) shuffle(indices);
         $("#completed").toggle();
-        $("#maxStreak").toggle();
         $("#skipsUsed").toggle();
-        $("#precision").toggle();
         resetStats();
         clearTimeout(timeout);
         getOneCry(cryIndex);

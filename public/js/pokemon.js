@@ -2284,7 +2284,7 @@ const POKEMON_DE = [[
     "Plusle", "Minun",
     "Volbeat", "Illumise",
     "Roselia",
-    "Schluppuck", "Schluckwech",
+    "Schluppuck", "Schlukwech",
     "Kanivanha", ["Tohaido", "Tohaido_Mega"],
     "Wailmer", "Wailord",
     "Camaub", ["Camerupt", "Camerupt_Mega"],

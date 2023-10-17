@@ -1,3 +1,7 @@
+a {
+    text-decoration: none;
+}
+
 body {
     background-color: #222222;
 }
@@ -10,7 +14,7 @@ h1, p {
     text-align: center;
 }
 
-.cryButton {
+.cryButton, .landingButton {
     border-radius: 20px;
     border: 2px solid #000000;
     background-color: #dddddd;
@@ -20,7 +24,7 @@ h1, p {
     display: flex;
 }
 
-.cryButton, .toggleSwitch, #genSelector, #langSelector, #skipButton, #resultsButton {
+.cryButton, .toggleSwitch, .landingButton, #genSelector, #langSelector, #skipButton, #resultsButton {
     /* make the text unhighlightable. */
     user-select: none;
     -moz-user-select: none;
@@ -96,6 +100,31 @@ h1, p {
 .genList:hover, .langList:hover {
     filter: brightness(75%);
     color: black;
+}
+
+.landingButton {
+    width: 400px;
+    height: 400px;
+    margin: 50px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.landingButton:hover, #skipButton:hover, #resultsButton:hover {
+    filter: brightness(75%);
+    cursor: pointer;
+}
+
+.landingButton > span {
+    font-size: 18pt;
+    text-align: center;
+    color: black;
+}
+
+.landingButtonContainer {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .listItem {
@@ -309,11 +338,6 @@ h1, p {
     padding: 5px 15px;
     width: 100px;
     margin: 15px;
-}
-
-#skipButton:hover, #resultsButton:hover {
-    filter: brightness(75%);
-    cursor: pointer;
 }
 
 #toggleHardcoreSlider::after {

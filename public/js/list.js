@@ -162,7 +162,7 @@
                 openParen = "(";
             }
 
-            let pkmnFlat = POKEMON.flat(2);
+            let pkmnFlat = POKEMON.flat(2).filter((mon) => !mon.includes(SKIPCHAR));
             pkmnList.children().each(function (cryIndex, element) {
                 if (typeof pkmnFlat[cryIndex] === 'string')
                     $(element).find("span").text(pkmnFlat[cryIndex].includes(DELIMITER)
