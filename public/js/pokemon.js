@@ -514,7 +514,13 @@ const POKEMON_EN = [[
     "Dipplin",
     "Poltchageist", "Sinistcha",
     "Okidogi", "Munkidori", "Fezandipiti",
-    [["Ogerpon_Teal", "Ogerpon_Wellspring", "Ogerpon_Hearthflame", "Ogerpon_Cornerstone"]]
+    [["Ogerpon_Teal", "Ogerpon_Wellspring", "Ogerpon_Hearthflame", "Ogerpon_Cornerstone"]],
+    "Archaludon",
+    "Hydrapple",
+    "Gouging Fire", "Raging Bolt",
+    "Iron Boulder", "Iron Crown",
+    [["Terapagos_Normal", "Terapagos_Terastal", "Terapagos_Stellar"]],
+    "Pecharunt"
 ]];
 
 // retro mode filter tools
@@ -1087,7 +1093,13 @@ const POKEMON_JP = [[
     "カミッチュ",
     "チャデス", "ヤバソチャ",
     "イイネイヌ", "マシマシラ", "キチキギス",
-    [["オーガポン_みどり", "オーガポン_いど", "オーガポン_かまど", "オーガポン_いしずえ"]]
+    [["オーガポン_みどり", "オーガポン_いど", "オーガポン_かまど", "オーガポン_いしずえ"]],
+    "ブリジュラス",
+    "カミツオロチ",
+    "ウガツホムラ", "タケルライコ",
+    "テツノイワオ", "テツノカシラ",
+    [["テラパゴス_ノーマル", "テラパゴス_テラスタル", "テラパゴス_ステラ"]],
+    "モモワロウ"
 ]];
 
 const POKEMON_FR = [[
@@ -1601,7 +1613,13 @@ const POKEMON_FR = [[
     "Pomdramour",
     "Poltchageist", "Théffroyable",
     "Félicanis", "Fortusimia", "Favianos",
-    [["Ogerpon_Turqoise", "Ogerpon_Puits", "Ogerpon_Fourneau", "Ogerpon_Pierre"]]
+    [["Ogerpon_Turqoise", "Ogerpon_Puits", "Ogerpon_Fourneau", "Ogerpon_Pierre"]],
+    "Pondralugon",
+    "Pomdorochi",
+    "Feu-Perçant", "Ire-Foudre",
+    "Roc-de-Fer", "Chef-de-Fer",
+    [["Terapagos_Normale", "Terapagos_Téracristal", "Terapagos_Stellaire"]],
+    "Pêchaminus"
 ]];
 
 const POKEMON_ES = [[
@@ -2115,7 +2133,13 @@ const POKEMON_ES = [[
     "Dipplin",
     "Poltchageist", "Sinistcha",
     "Okidogi", "Munkidori", "Fezandipiti",
-    [["Ogerpon_Turquesa", "Ogerpon_Fuente", "Ogerpon_Horno", "Ogerpon_Cimiento"]]
+    [["Ogerpon_Turquesa", "Ogerpon_Fuente", "Ogerpon_Horno", "Ogerpon_Cimiento"]],
+    "Archaludon",
+    "Hydrapple",
+    "Flamariete", "Electrofuria",
+    "Ferromole", "Ferrotesta",
+    [["Terapagos_Normal", "Terapagos_Teracristal", "Terapagos_Astral"]],
+    "Pecharunt"
 ]];
 
 const POKEMON_DE = [[
@@ -2629,7 +2653,13 @@ const POKEMON_DE = [[
     "Sirapfel",
     "Mortcha", "Fatalitcha",
     "Boninu", "Benesaru", "Beatori",
-    [["Ogerpon_Türkisgrüne", "Ogerpon_Brunnen", "Ogerpon_Ofen", "Ogerpon_Fundament"]]
+    [["Ogerpon_Türkisgrüne", "Ogerpon_Brunnen", "Ogerpon_Ofen", "Ogerpon_Fundament"]],
+    "Briduradon",
+    "Hydrapfel",
+    "Keilflamme", "Furienblitz",
+    "Eisenfels", "Eisenhaupt",
+    [["Terapagos_Normal", "Terapagos_Terakristall", "Terapagos_Stellar"]],
+    "Infamomo"
 ]];
 
 const POKEMON_IT = [[
@@ -3143,7 +3173,13 @@ const POKEMON_IT = [[
     "Dipplin",
     "Poltchageist", "Sinistcha",
     "Okidogi", "Munkidori", "Fezandipiti",
-    [["Ogerpon_Turchese", "Ogerpon_Pozzo", "Ogerpon_Focolare", "Ogerpon_Fondamenta"]]
+    [["Ogerpon_Turchese", "Ogerpon_Pozzo", "Ogerpon_Focolare", "Ogerpon_Fondamenta"]],
+    "Archaludon",
+    "Hydrapple",
+    "Vampeaguzze", "Furiatonante",
+    "Massoferreo", "Capoferreo",
+    [["Terapagos_Normale", "Terapagos_Teracristal", "Terapagos_Astrale"]],
+    "Pecharunt"
 ]];
 
 const POKEMON_KR = [[
@@ -3657,7 +3693,13 @@ const POKEMON_KR = [[
     "과미르",
     "차데스", "그우린차",
     "조타구", "이야후", "기로치",
-    [["오거폰_벽록", "오거폰_우물", "오거폰_화덕", "오거폰_주춧돌"]]
+    [["오거폰_벽록", "오거폰_우물", "오거폰_화덕", "오거폰_주춧돌"]],
+    "브리두라스",
+    "과미드라",
+    "꿰뚫는화염", "날뛰는우레",
+    "무쇠암석", "무쇠감투",
+    [["테라파고스_노말", "테라파고스_테라스탈", "테라파고스_스텔라"]],
+    "복숭악동"
 ]];
 
 const POKEMON_ZH_T = [[
@@ -4171,7 +4213,13 @@ const POKEMON_ZH_T = [[
     "裹蜜蟲",
     "斯魔茶", "來悲粗茶",
     "夠讚狗", "願增猿", "吉雉雞",
-    [["厄鬼椪_碧草", "厄鬼椪_水井", "厄鬼椪_火灶", "厄鬼椪_礎石"]]
+    [["厄鬼椪_碧草", "厄鬼椪_水井", "厄鬼椪_火灶", "厄鬼椪_礎石"]],
+    "鋁鋼橋龍",
+    "蜜集大蛇",
+    "破空焰", "猛雷鼓",
+    "鐵磐岩", "鐵頭殼",
+    [["太樂巴戈斯_普通", "太樂巴戈斯_太晶", "太樂巴戈斯_星晶"]],
+    "桃歹郎"
 ]];
 
 const POKEMON_ZH_S = [[
@@ -4685,5 +4733,11 @@ const POKEMON_ZH_S = [[
     "裹蜜虫",
     "斯魔茶 ", "来悲粗茶",
     "够赞狗", "愿增猿", "吉雉鸡",
-    [["厄诡椪_碧草", "厄诡椪_水井", "厄诡椪_火灶", "厄诡椪_础石"]]
+    [["厄诡椪_碧草", "厄诡椪_水井", "厄诡椪_火灶", "厄诡椪_础石"]],
+    "铝钢桥龙",
+    "蜜集大蛇",
+    "破空焰", "猛雷鼓",
+    "铁磐岩", "铁头壳",
+    [["太乐巴戈斯_普通", "太乐巴戈斯_太晶", "太乐巴戈斯_星晶"]],
+    "桃歹郎"
 ]];

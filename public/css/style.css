@@ -235,6 +235,10 @@ h1, p {
     background-color: #555555;
 }
 
+#Eternatus_Eternamax > img {
+    image-rendering: pixelated;
+}
+
 #selectedItem {
     background-color: #3875D7;
     cursor: pointer;
