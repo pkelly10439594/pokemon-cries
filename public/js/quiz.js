@@ -178,6 +178,8 @@
             $(`<img src="/public/images/${x.replace("%", "%25")}.${isModern ? "png" : "gif"}"
             class="revealImg${pics.length}${isModern ? "" : " retro"}" id="img${i}">`)));
         answerImg.append("<br>");
+        // if the audio is currently playing when the cry plays, restart the cry
+        if (!quizAudio[0].paused) quizAudio[0].currentTime = 0;
         quizAudio.trigger("play");
         timeout = $("#toggleSlowInput").is(":checked")
                     ? setTimeout(getOneCry, 4000, cryIndex)
@@ -187,6 +189,7 @@
     function resetStats() {
         cryIndex = currStreak = longestStreak = skipsUsed = totalRight = 0;
         $("#completed").text(`Completed: ${cryIndex}/${indices.length}`);
+        $("#numfailed").text(`Mistakes: ${cryIndex - totalRight}`);
         $("#curStreak").text(`Current streak: ${currStreak}`);
         $("#maxStreak").text(`Longest streak: ${longestStreak}`);
         $("#skipsUsed").text(`Skips used: ${skipsUsed}`);
@@ -317,6 +320,7 @@
         $("#curStreak").text(`Current streak: ${++currStreak}`);
         if (currStreak > longestStreak)
             $("#maxStreak").text(`Longest streak: ${longestStreak = currStreak}`);
+        $("#numfailed").text(`Mistakes: ${cryIndex - totalRight}`);
         $("#precision").text(`Accuracy: ${(100 * totalRight / cryIndex).toFixed(2)}%`);
     });
 
@@ -360,6 +364,7 @@
         quizInput.val(answer);
         $("#completed").text(`Completed: ${++cryIndex}/${indices.length}`);
         revealAnswer();
+        $("#numfailed").text(`Mistakes: ${cryIndex - totalRight}`);
         $("#curStreak").text(`Current streak: ${currStreak = 0}`);
         $("#skipsUsed").text(`Skips used: ${++skipsUsed}`);
         $("#precision").text(`Accuracy: ${(100 * totalRight / cryIndex).toFixed(2)}%`);
