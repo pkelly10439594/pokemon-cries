@@ -60,7 +60,8 @@
                                                         ? form.slice(form.indexOf(DELIMITER)).toLowerCase()
                                                         : "";}),
                                                 Array(cry.length).fill(indAsStr),
-                                                indAsStr + cry[0].slice(cry[0].indexOf(DELIMITER)).toLowerCase(),
+                                                // this is designed to handle only Cramorant and Mega Tatsugiri atm, could break later
+                                                indAsStr + cry[0].slice(cry[0].indexOf(DELIMITER)).split(" ")[0].toLowerCase(),
                                                 generation));
                         else // this pokemon has multiple initial forms
                             pkmnList.append(getPkmnCryHTML(
@@ -144,7 +145,8 @@
             switch ($(langBtn).attr("id")) {
                 case "langJP": POKEMON = POKEMON_JP; break;
                 case "langFR": POKEMON = POKEMON_FR; break;
-                case "langES": POKEMON = POKEMON_ES; break;
+                case "langES_ES": POKEMON = POKEMON_ES_ES; break;
+                case "langES_LA": POKEMON = POKEMON_ES_LA; break;
                 case "langDE": POKEMON = POKEMON_DE; break;
                 case "langIT": POKEMON = POKEMON_IT; break;
                 case "langKR": POKEMON = POKEMON_KR; break;

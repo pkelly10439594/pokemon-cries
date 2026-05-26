@@ -32,16 +32,18 @@
                                                                                                 cry[0].substring(cry[0].indexOf(DELIMITER) + 1))
                                                         })`,
                                         `${("000" + (i + 1)).slice(-4)}${mon[0].substring(mon[0].indexOf(DELIMITER)).toLowerCase()}`];
-                            else
-                                return [cry.every(v => typeof v === "string")
-                                        ? cry[0].includes(DELIMITER)
-                                            ? cry[0].substring(0, cry[0].indexOf(DELIMITER))
-                                            : cry[0]
-                                        // this is designed to handle only Finizen atm, could break later
-                                        : cry.map(v => typeof v === "string"
-                                                ? v
-                                                : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "),
-                                        `${("000" + (i + 1)).slice(-4)}`];
+                            if (monScan[0] !== cry)
+                                return [`${cry[0].substring(0, cry[0].indexOf(DELIMITER))} (${cry[0].substring(cry[0].indexOf(DELIMITER) + 1, cry[0].indexOf(" "))})`,
+                                        `${("000" + (i + 1)).slice(-4)}${cry[0].substring(cry[0].indexOf(DELIMITER), cry[0].indexOf(" ")).toLowerCase()}`];
+                            return [cry.every(v => typeof v === "string")
+                                    ? cry[0].includes(DELIMITER)
+                                        ? cry[0].substring(0, cry[0].indexOf(DELIMITER))
+                                        : cry[0]
+                                    // this is designed to handle only Finizen atm, could break later
+                                    : cry.map(v => typeof v === "string"
+                                            ? v
+                                            : `${v[0].substring(v[0].indexOf(DELIMITER) + 1).replace(DELIMITER, " (")})`).join(" / "),
+                                    `${("000" + (i + 1)).slice(-4)}`];
                         }
         }
         // if the pokemon cry is a unique form of a pokemon
@@ -68,7 +70,7 @@
             openParen = "(";
         } if (["langJP", "langKR"].includes(language)) slash = "・";
         else if (["langZH_T", "langZH_S"].includes(language)) slash = "／";
-
+console.log(list)
         return list.map(
                 (x, i) => typeof x === "string"
                         ? (!x.includes(DELIMITER) ? x : `${x.replace(DELIMITER, openParen)}${closeParen}`)
@@ -87,7 +89,10 @@
                                                 x.slice(1).reduce((str, cur) => 
                                                             `${str}${slash}${cur.substring(cur.indexOf(DELIMITER) + 1)}`,
                                                                         x[0].substring(x[0].indexOf(DELIMITER) + 1))}${closeParen}`
-                                : x[0].substring(0, x[0].indexOf(DELIMITER))));
+                                : list[i - 1].includes(x[0].substring(0, x[0].indexOf(DELIMITER)))
+                                                    // BUGFIX: CHECK IF IT ACTUALLY HAS A SPACE FIRST IDIOT!! (introduced by mega tatsugiri)
+                                    ? `${x[0].substring(0, x[0].indexOf(DELIMITER))}${openParen}${x[0].substring(x[0].indexOf(DELIMITER) + 1, x[0].indexOf(" "))}${closeParen}`
+                                    : x[0].substring(0, x[0].indexOf(DELIMITER))));
     }
 
     // shuffle the indices (Fisher-Yates algorithm)
@@ -386,7 +391,8 @@
                 case "langEN": POKEMON = POKEMON_EN; break;
                 case "langJP": POKEMON = POKEMON_JP; break;
                 case "langFR": POKEMON = POKEMON_FR; break;
-                case "langES": POKEMON = POKEMON_ES; break;
+                case "langES_ES": POKEMON = POKEMON_ES_ES; break;
+                case "langES_LA": POKEMON = POKEMON_ES_LA; break;
                 case "langDE": POKEMON = POKEMON_DE; break;
                 case "langIT": POKEMON = POKEMON_IT; break;
                 case "langKR": POKEMON = POKEMON_KR; break;

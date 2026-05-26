@@ -89,6 +89,10 @@ h1 {
     background: linear-gradient(120deg, #F34134 20%, #8334B7 80%);
 }
 
+.gen10 {
+    background: linear-gradient(120deg, #66E7A4 20%, #086CE4 80%);
+}
+
 .genList, .langList {
     padding: 10px;
     cursor: pointer;
@@ -322,6 +326,12 @@ h1 {
     background: url("/public/images/modern/1007.png") no-repeat left / 50px,
                 url("/public/images/modern/1008.png") no-repeat right / 50px,
                 linear-gradient(120deg, #F34134 20%, #8334B7 80%);
+}
+
+#genList10 {
+    background: url("/public/images/modern/9999.png") no-repeat left / 50px,
+                url("/public/images/modern/9999.png") no-repeat right / 50px,
+                linear-gradient(120deg, #66E7A4 20%, #086CE4 80%);
 }
 
 #genListExtras > .genList {
